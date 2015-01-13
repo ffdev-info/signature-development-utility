@@ -3,7 +3,7 @@ signature-development-utility
 
 PRONOM/DROID Signature Development Utility source code, first written in late 2011. 
 
-This application is hosted by The National Archives: http://test.linkeddatapronom.nationalarchives.gov.uk/sigdev/index.htm
+This application is hosted by The National Archives: http://test.apps.linkeddatapronom.nationalarchives.gov.uk/sigdev/index.htm
 and mirrored on my own site: http://exponentialdecay.co.uk/sd/index.htm
 
 This code is hosted here to enable it to be built upon and improved by myself and others. The first point of call
