@@ -10,6 +10,8 @@ This code is hosted here to enable it to be built upon and improved by myself an
 will be to build unit tests to help unravel some of the complexity of the code and make it more modular. There are
 also a handful of known issues to be dealt with, see the issues log for more information.
 
+**COPTR Entry:** http://coptr.digipres.org/PRONOM_Signature_Development_Utility 
+
 ##PRONOM/DROID New Syntax
 
 Others interested in development of file format signature development utilities might want to make use of DROID's new
