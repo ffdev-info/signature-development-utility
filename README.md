@@ -10,7 +10,13 @@ This code is hosted here to enable it to be built upon and improved by myself an
 will be to build unit tests to help unravel some of the complexity of the code and make it more modular. There are
 also a handful of known issues to be dealt with, see the issues log for more information.
 
-###Contribution
+##PRONOM/DROID New Syntax
+
+Others interested in development of file format signature development utilities might want to make use of DROID's new
+syntax. Documented partially (unofficially) here: http://exponentialdecay.co.uk/blog/hacking-the-droid-signature-file-keep-it-simple-stupid/ Get back to me and let me know
+how it goes. I am keen to see more of these mechanisms created. 
+
+##Contribution
 
 The form represents the limits of my JQuery knowledge at the time. We have three fields that we can create dynamically but it
 would be nice if we could create forms dynamically also.
@@ -30,13 +36,7 @@ Signature information is output by [generatebytecode.php](https://github.com/exp
 the stored proecedure implmenetion. Any unit test would neeed to be written against this implementation and whatever can be
 reverse engineered from the signature file. 
 
-###PRONOM/DROID New Syntax
-
-Others interested in development of file format signature development utilities might want to make use of DROID's new
-syntax. Documented partially (unofficially) here: http://exponentialdecay.co.uk/blog/hacking-the-droid-signature-file-keep-it-simple-stupid/ Get back to me and let me know
-how it goes. I am keen to see more of these mechanisms created. 
-
-###License
+##License
 
 Copyright (c) 2011 Ross Spencer
 
