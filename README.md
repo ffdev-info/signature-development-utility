@@ -30,6 +30,12 @@ Signature information is output by [generatebytecode.php](https://github.com/exp
 the stored proecedure implmenetion. Any unit test would neeed to be written against this implementation and whatever can be
 reverse engineered from the signature file. 
 
+###PRONOM/DROID New Syntax
+
+Others interested in development of file format signature development utilities might want to make use of DROID's new
+syntax. Documented partially (unofficially) here: http://exponentialdecay.co.uk/blog/hacking-the-droid-signature-file-keep-it-simple-stupid/ Get back to me and let me know
+how it goes. I am keen to see more of these mechanisms created. 
+
 ###License
 
 Copyright (c) 2011 Ross Spencer
