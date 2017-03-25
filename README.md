@@ -12,13 +12,13 @@ also a handful of known issues to be dealt with, see the issues log for more inf
 
 **COPTR Entry:** http://coptr.digipres.org/PRONOM_Signature_Development_Utility 
 
-##PRONOM/DROID New Syntax
+## PRONOM/DROID New Syntax
 
 Others interested in development of file format signature development utilities might want to make use of DROID's new
 syntax. Documented partially (unofficially) here: http://exponentialdecay.co.uk/blog/hacking-the-droid-signature-file-keep-it-simple-stupid/ Get back to me and let me know
 how it goes. I am keen to see more of these mechanisms created. 
 
-##Contribution
+## Contribution
 
 The form represents the limits of my JQuery knowledge at the time. We have three fields that we can create dynamically but it
 would be nice if we could create forms dynamically also.
@@ -27,18 +27,18 @@ would be nice if we could create forms dynamically also.
 * Test process_signature_form.php to ensure that forms (number should be in 'Counter' variable are processed
 
 All important data is submitted through process_signature_form.php where it is processed. Signature information for example
-is processed through [generateSignatureCollection($count, $_POST)](https://github.com/exponential-decay/signature-development-utility/blob/master/php/process_signature_form.php#L85) 
+is processed through [generateSignatureCollection($count)](https://github.com/exponential-decay/signature-development-utility/blob/master/php/process_signature_form.php#L85) 
 and then once returned, InternalSignatureCollections and FileFormatCollections are pieced together as XML before download by the user. 
 
 Signature information is output by [generatebytecode.php](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php) where the argument is a SignatureCollection object (e.g. [generateSignatureFromObject($signature_collection) ](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php#L63) the return is [PRONOM/DROID formatted XML](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php#L148).
 
-####Additional Contributions
+#### Additional Contributions
 
 * Unit tests would be wonderful. This is much harder for me now without access to PRONOM to write them against
 the stored proecedure implmenetion. Any unit test would neeed to be written against this implementation and whatever can be
 reverse engineered from the signature file. 
 
-##License
+## License
 
 Copyright (c) 2011 Ross Spencer
 
