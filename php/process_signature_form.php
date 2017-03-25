@@ -5,6 +5,9 @@
 	//uuid lib from: http://jkingweb.ca/code/php/lib.uuid/
 	include_once("uuid/lib.uuid.php");
 
+	const GET_VERSION = "version1";
+	const GET_NAME = "name1";
+
 	if(isset($_POST['rdf']) == true)
 	{
 		generateRDF();
@@ -34,8 +37,8 @@
 		$sigdev = $xml->xmlCreateElement('sigdev:DevelopmentSignature', $doc, $rdf);
 		$xml->xmlAddAttribute('rdf:about', 'http://nationalarchives.gov.uk/preservation/sigdev/signature/' . UUID::mint( 4 ), $doc, $sigdev);
 		
-		$xml->xmlCreateTextElement('rdfs:label', $_POST['name1'], $doc, $sigdev);
-		$xml->xmlCreateTextElement('sigdev:version', $_POST['version1'], $doc, $sigdev);
+		$xml->xmlCreateTextElement('rdfs:label', $_POST[GET_NAME], $doc, $sigdev);
+		$xml->xmlCreateTextElement('sigdev:version', $_POST[GET_VERSION], $doc, $sigdev);
 		$xml->xmlCreateTextElement('sigdev:extension', $_POST['extension1'], $doc, $sigdev);
 		$xml->xmlCreateTextElement('sigdev:internetMediaType', $_POST['mimetype1'], $doc, $sigdev);
 		$xml->xmlCreateTextElement('sigdev:puid', $_POST['puid1'], $doc, $sigdev);
@@ -64,7 +67,7 @@
 			$xml->xmlAddAttribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#integer', $doc, $maxOffset);
 		}
 		
-		$filename = 'Content-disposition: attachment; filename=' . str_replace(' ', '-', $_POST[name1]) . '-v' . str_replace(' ', '-', $_POST[version1]) . '.rdf';
+		$filename = 'Content-disposition: attachment; filename=' . str_replace(' ', '-', $_POST[GET_NAME]) . '-v' . str_replace(' ', '-', $_POST[GET_VERSION]) . '.rdf';
 		
 		header($filename);
 		header ('Content-Type: text/xml');		
@@ -214,7 +217,7 @@
 		$doc1 = $xml->combine_xml($doc1, $collection, 'FFSignatureFile', 'InternalSignatureCollection');
 		$doc1 = $xml->combine_xml($doc1, $file_formats, 'FFSignatureFile', 'FileFormatCollection');	
 
-		$filename = 'Content-disposition: attachment; filename=' . str_replace(' ', '-', $_POST[name1]) . '-v' . str_replace(' ', '-', $_POST[version1]) . '-signature-file.xml';
+		$filename = 'Content-disposition: attachment; filename=' . str_replace(' ', '-', $_POST[GET_NAME]) . '-v' . str_replace(' ', '-', $_POST[GET_VERSION]) . '-signature-file.xml';
 				
 		header($filename);
 		header ('Content-Type: text/xml');		
