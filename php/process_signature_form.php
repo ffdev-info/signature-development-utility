@@ -11,8 +11,9 @@
 	}
 	else
 	{
-		$byte_sequences = generateSignatureCollection($_POST['counter'], $_POST);
-		$file_formats = generateFormatCollection(1, $_POST);
+		$counter = $_POST['counter'];
+		$byte_sequences = generateSignatureCollection($counter);
+		$file_formats = generateFormatCollection(1);
 		generateSignatureFile($byte_sequences, $file_formats);
 	}
 	
@@ -82,7 +83,7 @@
 	* Returns		:  n/a
 	*
 	*********************************************************************/
-	function generateSignatureCollection($count, $_POST)
+	function generateSignatureCollection($count)
 	{
 		$gen = new SignatureGenerator();	
 		$signature_collection = new SignatureCollection();
@@ -121,7 +122,7 @@
 	* Returns		:  n/a
 	*
 	*********************************************************************/
-	function generateFormatCollection($i, $_POST)
+	function generateFormatCollection($i)
 	{
 		$new_name 		= 'name' . $i;
 		$new_version 	= 'version' . $i;
