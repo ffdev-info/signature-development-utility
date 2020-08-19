@@ -1,52 +1,38 @@
-signature-development-utility
-=============================
+# Signature Development Utility
 
-[PRONOM](http://www.nationalarchives.gov.uk/PRONOM/Default.aspx)/[DROID](http://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/) Signature Development Utility source code, first written in late 2011. 
+[PRONOM][pronom-1]/[DROID][droid-1] Signature Development Utility source code,
+first written in late 2011.
 
-This application is hosted by The National Archives: http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
-and mirrored on my own site: http://exponentialdecay.co.uk/sd/index.htm
+* **COPTR Entry:** [Signature development utility][coptr-1]
 
-This code is hosted here to enable it to be built upon and improved by myself and others. The first point of call
-will be to build unit tests to help unravel some of the complexity of the code and make it more modular. There are
-also a handful of known issues to be dealt with, see the issues log for more information.
+## Current version: 2.0
 
-**COPTR Entry:** http://coptr.digipres.org/PRONOM_Signature_Development_Utility 
+The new development is written in Golang and hosted on
+[ffdev.info][ffdev-1]. It has been written to better support the container
+signature workflow. It has also been written so that new features can be
+developed easier as I tend not to write in PHP anymore. There is more
+information at [ffdev.info][ffdev-1].
 
-## PRONOM/DROID New Syntax
+## Legacy version...
 
-Others interested in development of file format signature development utilities might want to make use of DROID's new
-syntax. Documented partially (unofficially) here: http://exponentialdecay.co.uk/blog/hacking-the-droid-signature-file-keep-it-simple-stupid/ Get back to me and let me know
-how it goes. I am keen to see more of these mechanisms created. 
+The first iteration of this application is hosted by
+[The National Archives][tna-1] and mirrored on [my own site][expo-1]. It is
+written in PHP and, well, it's a bit harder to maintain, but still it provides
+a pretty pure implementation of what signature files used to be like in DROID 4
+and 5 and largely 6, although the patterns are not de-constructed and compiled
+differently in DROID 6 at runtime. 1.0 can be found in the releases section of
+[this repository][gh-1].
 
-## Contribution
+## Contributing
 
-The form represents the limits of my JQuery knowledge at the time. We have three fields that we can create dynamically but it
-would be nice if we could create forms dynamically also.
+Check out the [issues][issues-1] log for ideas for contributing and things I
+hope to be working on.
 
-* Update index.htm to enable multiple forms to be created for a single submit
-* Test process_signature_form.php to ensure that forms (number should be in 'Counter' variable are processed
-
-All important data is submitted through process_signature_form.php where it is processed. Signature information for example
-is processed through [generateSignatureCollection($count)](https://github.com/exponential-decay/signature-development-utility/blob/master/php/process_signature_form.php#L85) 
-and then once returned, InternalSignatureCollections and FileFormatCollections are pieced together as XML before download by the user. 
-
-Signature information is output by [generatebytecode.php](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php) where the argument is a SignatureCollection object (e.g. [generateSignatureFromObject($signature_collection) ](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php#L63) the return is [PRONOM/DROID formatted XML](https://github.com/exponential-decay/signature-development-utility/blob/master/php/generatebytecode/generatebytecode.php#L148).
-
-#### Additional Contributions
-
-* Unit tests would be wonderful. This is much harder for me now without access to PRONOM to write them against
-the stored proecedure implmenetion. Any unit test would neeed to be written against this implementation and whatever can be
-reverse engineered from the signature file. 
-
-## License
-
-Copyright (c) 2011 Ross Spencer
-
-This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
-
-The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-This notice may not be removed or altered from any source distribution.
-
+[pronom-1]: http://www.nationalarchives.gov.uk/PRONOM/Default.aspx
+[droid-1]: http://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/
+[tna-1]: http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
+[expo-1]: http://exponentialdecay.co.uk/sd/index.htm
+[issues-1]: https://github.com/exponential-decay/signature-development-utility/issues
+[coptr-1]: http://coptr.digipres.org/PRONOM_Signature_Development_Utility
+[ffdev-1]: http://ffdev.info
+[gh-1]: https://github.com/exponential-decay/signature-development-utility/releases/tag/1.0

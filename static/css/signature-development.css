@@ -1,0 +1,57 @@
+/* Signature development utility CSS. */
+
+h1.title {
+	font-size: 1.8rem;
+	line-height: 1.5;
+	letter-spacing: -.05rem;
+	font-weight: bold;
+	margin-bottom: 1%;
+	padding-top: 0.5%;
+}
+
+p.title {
+	margin-top: -1%;
+}
+
+h2.subtitle {
+	font-size: 1.7rem;
+	line-height: 1.6;
+	letter-spacing: 0;
+	font-weight: bold;
+	margin-bottom: 1%;
+}
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+  h1.title {
+  	font-size: 2.4rem;
+  	font-weight: bold;
+  	margin-bottom: 1%;
+  }
+  h2.subtitle {
+  	font-size: 1.7rem;
+  	font-weight: bold;
+  	margin-bottom: 1%;
+  }
+}
+
+label.left-label {
+	padding-top: 10%;
+}
+
+input.signature {
+	text-transform: uppercase;
+}
+
+#About > p {
+    font-style: italic;
+}
+
+p.gh {
+	font-family: courier;
+	font-color: black;
+}
+
+a:visited {
+	color: black;
+}

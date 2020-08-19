@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- Signature development utility -->
+  <title>Signature development utillity 2.0</title>
+  <meta name="description" content="Signature development utility 2.0">
+
+  <!-- Skeleton viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Skeleton specific imports -->
+  <!--<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>-->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+  <!-- Custom imports -->
+  <link rel="stylesheet" href="css/skeleton-tabs.css">
+  <link rel="stylesheet" href="css/signature-development.css">
+
+  <!-- It's just not the Internet without tabs, right? -->
+  <script src="js/skeleton-tabs.js"></script>
+
+  <!-- And we need the form to do things too -->
+  <script src="js/jquery-3.5.1.min.js"></script>
+  <script src="js/variables.js"></script>
+  <script src="js/load-static.js"></script>
+  <script src="js/clone.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="two columns" style="margin-top: 5%;">
+        <h1 style="color: #cc372f; font-style: bold;">✎‖</h1>
+      </div>
+      <div class="ten columns" style="margin-top: 5%; margin-left: -3%;">
+        <h1 class="title">Signature development utility: 2.0</h1>
+        <p class="title">For development of PRONOM compatible signatures...</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="twelve columns" style="margin-top: 5%">
+        <ul class="tab-nav">
+          <li>
+            <a class="button tablink tab-color" onclick="openTab(event, 'Standard signatures')">Standard signatures</a>
+          </li>
+          <li>
+            <a class="button tablink" onclick="openTab(event, 'Container signatures')">Container signatures</a>
+          </li>
+          <li>
+            <a class="button tablink" onclick="openTab(event, 'Guide')">Guide</a>
+          </li>
+          <li>
+            <a class="button tablink" onclick="openTab(event, 'About')">About</a>
+          </li>
+        </ul>
+
+        <!-- Standard signature development TAB -->
+        <!-- Standard signature development TAB -->
+        <!-- Standard signature development TAB -->
+        <!-- Standard signature development TAB -->
+
+        <div id="Standard signatures" class="tab">
+          <h2 class="subtitle">Standard signatures</h2>
+          <p>
+            Enter your signatures and associated metadata below. Press
+            create signature to save them out to a new signature file!
+          </p>
+
+          <form action="processStandardSignature" method="POST">
+
+            <div class="row">
+              <div class="two columns">
+                <label class="left-label" for="name">Name</label>
+              </div><div class="ten columns">
+                <input
+                  name="format-name",
+                  class="u-full-width"
+                  type="text"
+                  placeholder="Development Signature"
+                  value="Development Signature" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="two columns">
+                <label class="left-label" for="version">Version</label>
+              </div>
+              <div class="four columns">
+                <input
+                  name="format-version"
+                  class="u-full-width"
+                  type="text"
+                  placeholder="1.0"
+                  value="1.0" />
+              </div>
+
+              <div class="two columns">
+                <label class="left-label" for="ext">Extension</label>
+              </div>
+              <div class="four columns">
+                <input
+                  name="format-extension"
+                  class="u-full-width"
+                  type="text"
+                  placeholder="ext"
+                  value="ext" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="two columns">
+                <label class="left-label" for="puid">PUID</label>
+              </div>
+              <div class="four columns">
+                <input
+                  name="puid"
+                  class="u-full-width"
+                  type="text"
+                  placeholder="dev/1"
+                  value="dev/1" />
+              </div>
+
+              <div class="two columns">
+                <label class="left-label" for="mime">MIME</label>
+              </div>
+              <div class="four columns">
+                <input
+                  name="mimetype"
+                  class="u-full-width"
+                  type="text"
+                  placeholder="application/octet-stream"
+                  value="application/octet-stream" />
+              </div>
+            </div>
+
+            <!-- Logical break on the page between metadata and signature-->
+            <!-- Logical break on the page between metadata and signature-->
+            <!-- Logical break on the page between metadata and signature-->
+
+            <br/>
+
+            <div id="inputs">
+              <div id="standard-signatures-container">
+                <!-- Standard signatures dynamically loaded to DOM here. -->
+              </div>
+            </div>
+
+            <div class="twelve columns" style="text-align: right;">
+              <input id="trigger-only" name="triggers" type="checkbox" title="You can use your metadata from this signature with your container identifier.">
+              <span class="label-body" title="You can use your metadata from this signature with your container identifier.">For container signatures only?</span>
+            </div>
+
+            <br/><br/>
+
+            <!-- Buttons -->
+            <div class="row">
+              <div class="four columns">
+                <input class="button u-full-width" id="btnAdd" type="button" value="Add Sequence">
+              </div>
+              <div class="four columns">
+                <input class="button u-full-width" id="btnDel" type="button" value="Remove Sequence" disabled="disabled">
+              </div>
+              <div class="four columns">
+                <input class="button button-primary u-full-width" type="submit" type="submit" value="create signature">
+              </div>
+            </div>
+
+        </form>
+        </div>
+
+        <!-- Container signature development TAB -->
+        <!-- Container signature development TAB -->
+        <!-- Container signature development TAB -->
+        <!-- Container signature development TAB -->
+
+        <div id="Container signatures" class="tab" style="display:none">
+          <h2 class="subtitle">Container signatures</h2>
+          <p>
+            Enter your signatures and associated metadata below. Press
+            create signature to save them out to a new signature file!
+            <br/><br/><b>Remember!</b> For a container signature you need a
+            reference to your PUID (fmt/x-fmt) number in either the default
+            standard signature file or custom signature file for it to work.
+          </p>
+
+          <form action="processContainerSignature" method="POST">
+
+            <div class="row">
+              <div class="two columns">
+                <label class="left-label" for="container-description">Description</label>
+              </div><div class="ten columns">
+                <input
+                  title="This is metadata for use in the container signature file only"
+                  name="container-description",
+                  class="u-full-width"
+                  type="text"
+                  placeholder="Container description"
+                  value="Container description" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="two columns">
+                <label class="left-label" for="continer-type">Type</label>
+              </div>
+              <div class="four columns">
+                  <select id="container-type" name="container-type"
+                    title="If you have a container file there's a good chance your file identified as one of these before coming here to create a signature">
+                    <!-- OLE2: fmt/111; ZIP: fmt/189; ZIP: x-fmt/263 -->
+                    <option value="OLE2">OLE2</option>
+                    <option value="ZIP">ZIP</option>
+                  </select>
+              </div>
+
+              <div class="two columns">
+                <label class="left-label" for="linking-puid">Linking PUID</label>
+              </div>
+              <div class="four columns">
+                <input
+                  title="PUID for this signature; needs to exist in a standard signature file"
+                  name="connecting-puid"
+                  class="u-full-width"
+                  type="text"
+                  placeholder="dev/1"
+                  value="dev/1" />
+              </div>
+            </div>
+
+            <!-- Container signature path and sequence inputs -->
+            <div id="container-inputs">
+              <input type="hidden" id="container-file-count"
+                  name="container-file-count" value="0" />
+              <div id="files-container">
+                <!-- Paths and sequences dynamically added to the DOM here... -->
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="row">
+              <div class="three columns">
+                <input class="button u-full-width" id="pathAdd" type="button"
+                    value="Add Path">
+              </div>
+              <div class="three columns">
+                <input class="button u-full-width" id="seqAdd" type="button"
+                    value="Add Sequence">
+              </div>
+              <div class="three columns">
+                <input class="button u-full-width" id="pathDel" type="button"
+                    value="Remove Path" disabled="disabled">
+              </div>
+              <div class="three columns">
+                <!-- TODO: Fix the text here to read "Remove sequence" but fix
+                     the problems with text-alignment when doing that -->
+                <input class="button u-full-width" id="seqDel" type="button"
+                    value="Del Sequence" disabled="disabled">
+              </div>
+            </div>
+            <div class="row">
+              <div class="twelve columns">
+                <input class="button button-primary u-full-width" type="submit"
+                    type="submit" value="create signature">
+              </div>
+            </div>
+
+          </form>
+
+          </div>
+
+        </div>
+
+        <!-- Guide Tab -->
+        <div id="guide-container">
+          <!-- Container for the signature development guide. -->
+        </div>
+
+        <!-- About Tab -->
+        <div id='about-contaainer'>
+          <!-- Container for the about text. -->
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
