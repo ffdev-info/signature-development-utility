@@ -102,9 +102,9 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 			log.Printf("ParseForm() err: %#v", err)
 			return
 		}
-		log.Printf(
+		/* log.Printf(
 			"Request from client (request.PostFrom): %#v\n", request.PostForm,
-		)
+		) */
 		if container {
 			// Process the form values and return a container signature
 			// file.
