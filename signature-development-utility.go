@@ -102,6 +102,7 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 			log.Printf("ParseForm() err: %#v", err)
 			return
 		}
+		log.Printf("Signature submission, thank you!")
 		/* log.Printf(
 			"Request from client (request.PostFrom): %#v\n", request.PostForm,
 		) */
