@@ -184,7 +184,7 @@ func (signature *SignatureInterface) ToPHP(port string) string {
 
 	counter := strconv.Itoa(len(signature.Sequences))
 
-	const ORIGINALURL = "http://0.0.0.0:%s/php/process_signature_form.php"
+	const ORIGINALURL = "http://localhost:%s/php/process_signature_form.php"
 
 	const count = "counter"
 	const name = "name1"
