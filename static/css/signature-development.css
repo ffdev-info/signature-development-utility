@@ -52,6 +52,14 @@ p.gh {
 	font-color: black;
 }
 
+a {
+	color: black;
+}
 a:visited {
 	color: black;
+}
+
+pre.nospace {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 }
