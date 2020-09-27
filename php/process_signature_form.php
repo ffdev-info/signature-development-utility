@@ -17,9 +17,8 @@
 		$counter = $_POST['counter'];
 		$byte_sequences = generateSignatureCollection($counter);
 		$file_formats = generateFormatCollection(1);
-		generateSignatureFile($byte_sequences, $file_formats);
+		echo generateSignatureFile($byte_sequences, $file_formats);
 	}
-
 
 	function generateRDF()
 	{
@@ -217,10 +216,7 @@
 		$doc1 = $xml->combine_xml($doc1, $collection, 'FFSignatureFile', 'InternalSignatureCollection');
 		$doc1 = $xml->combine_xml($doc1, $file_formats, 'FFSignatureFile', 'FileFormatCollection');
 
-		$filename = 'Content-disposition: attachment; filename=' . str_replace(' ', '-', $_POST[GET_NAME]) . '-v' . str_replace(' ', '-', $_POST[GET_VERSION]) . '-signature-file.xml';
-
-		header($filename);
 		header ('Content-Type: text/xml');
-		print $doc1;
+		echo $doc1;
 	}
 ?>

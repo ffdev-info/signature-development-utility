@@ -16,15 +16,17 @@ import (
 )
 
 var (
-	port  string
-	https bool
-	cert  string
-	key   string
+	port         string
+	bootsrapPort string
+	https        bool
+	cert         string
+	key          string
 )
 
 // Initialize the variables used for the flags
 func init() {
 	flag.StringVar(&port, "port", "8080", "port to run the utility on")
+	flag.StringVar(&bootsrapPort, "bootstrap", "8000", "port to run the utility on")
 	flag.BoolVar(&https, "https", false, "run a HTTPS server")
 	flag.StringVar(&cert, "cert", "localhost.crt", "certificate file")
 	flag.StringVar(&key, "key", "localhost.key", "private key file")
@@ -140,8 +142,8 @@ func processStandardForm(form url.Values) (string, string) {
 		droid := signatureFile.ToDROID(true)
 		return droid.String(), signatureFile.GetFileName()
 	}
-	droid := signatureFile.ToDROID(false)
-	return droid.String(), signatureFile.GetFileName()
+	droid := signatureFile.ToPHP(bootsrapPort)
+	return droid, signatureFile.GetFileName()
 }
 
 // processContainerForm will initiate the processing of a container

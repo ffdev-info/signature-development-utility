@@ -5,7 +5,10 @@ package sigdevutil
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -173,4 +176,60 @@ func (signature *SignatureInterface) GetFileName() string {
 	const devSig = "development-signature"
 	nicePUID := strings.Replace(signature.PUID, "/", "-", 1)
 	return fmt.Sprintf("%s-%s", devSig, nicePUID)
+}
+
+// Bootstrap signature development utility 2.0 to Signature development
+// utility 1.0.
+func (signature *SignatureInterface) ToPHP(port string) string {
+
+	counter := strconv.Itoa(len(signature.Sequences))
+
+	const ORIGINALURL = "http://0.0.0.0:%s/php/process_signature_form.php"
+
+	const count = "counter"
+	const name = "name1"
+	const version = "version1"
+	const ext = "extension1"
+	const mime = "mimetype1"
+
+	data := url.Values{
+		count:   {counter},
+		name:    {signature.FormatName},
+		version: {signature.VersionNumber},
+		ext:     {signature.Extension},
+		mime:    {signature.Extension},
+	}
+
+	const sig = "signature"
+	const anchor = "anchor"
+	const offset = "offset"
+	const maxoffset = "maxoffset"
+
+	for idx := 1; idx <= len(signature.Sequences); idx++ {
+		sigField := fmt.Sprintf("%s%d", sig, idx)
+		anchorField := fmt.Sprintf("%s%d", anchor, idx)
+		offsetField := fmt.Sprintf("%s%d", offset, idx)
+		maxOffsetField := fmt.Sprintf("%s%d", maxoffset, idx)
+
+		sequence := signature.Sequences[idx-1]
+
+		data[sigField] = []string{sequence.Sequence}
+		data[anchorField] = []string{sequence.Relativity}
+		data[offsetField] = []string{strconv.Itoa(sequence.Offset)}
+		data[maxOffsetField] = []string{strconv.Itoa(sequence.MaxOffset)}
+	}
+
+	originalURL := fmt.Sprintf(ORIGINALURL, port)
+	fmt.Fprintf(os.Stderr, "Bootstrap URL: %s", originalURL)
+
+	resp, err := http.PostForm(originalURL, data)
+	if err != nil {
+		return fmt.Sprintf("Error sending request: %s", err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Sprintf("Error sending request: %s", err)
+	}
+	return string(body)
 }
