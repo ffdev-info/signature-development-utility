@@ -191,13 +191,15 @@ func (signature *SignatureInterface) ToPHP(port string) string {
 	const version = "version1"
 	const ext = "extension1"
 	const mime = "mimetype1"
+	const puid = "puid1"
 
 	data := url.Values{
 		count:   {counter},
 		name:    {signature.FormatName},
 		version: {signature.VersionNumber},
 		ext:     {signature.Extension},
-		mime:    {signature.Extension},
+		mime:    {signature.MimeType},
+		puid:    {signature.PUID},
 	}
 
 	const sig = "signature"
