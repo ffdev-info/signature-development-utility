@@ -4,6 +4,7 @@
 package sigdevutil
 
 import (
+	"strings"
 	"time"
 )
 
@@ -26,4 +27,13 @@ func generateDateNoSpaces() string {
 	const dateFormat = "20060102"
 	currentTime := now()
 	return currentTime.Format(dateFormat)
+}
+
+// formatFilenameString returns a normalized component of a filename to
+// the caller.
+func formatFilenameString(input string) string {
+	niceName := strings.Replace(input, "/", "-", -1)
+	niceName = strings.Replace(niceName, " ", "-", -1)
+	niceName = strings.Replace(niceName, "*", "-", -1)
+	return niceName
 }

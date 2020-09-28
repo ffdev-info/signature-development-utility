@@ -173,9 +173,10 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 // GetFileName is a small helper function that helps us make some
 // useful metadata about our output.
 func (signature *SignatureInterface) GetFileName() string {
-	const devSig = "development-signature"
-	nicePUID := strings.Replace(signature.PUID, "/", "-", 1)
-	return fmt.Sprintf("%s-%s", devSig, nicePUID)
+	const sigFile = "signature-file"
+	niceName := formatFilenameString(signature.FormatName)
+	niceVersion := formatFilenameString(signature.VersionNumber)
+	return fmt.Sprintf("%s-%s-%s", niceName, niceVersion, sigFile)
 }
 
 // Bootstrap signature development utility 2.0 to Signature development
