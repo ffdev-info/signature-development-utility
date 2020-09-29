@@ -208,6 +208,8 @@ func (signature *SignatureInterface) ToPHP(port string) string {
 	const offset = "offset"
 	const maxoffset = "maxoffset"
 
+	const variableAnchor = "Variable"
+
 	for idx := 1; idx <= len(signature.Sequences); idx++ {
 		sigField := fmt.Sprintf("%s%d", sig, idx)
 		anchorField := fmt.Sprintf("%s%d", anchor, idx)
@@ -217,7 +219,15 @@ func (signature *SignatureInterface) ToPHP(port string) string {
 		sequence := signature.Sequences[idx-1]
 
 		data[sigField] = []string{sequence.Sequence}
+
+		// Variable sequence handling for 1.0.
 		data[anchorField] = []string{sequence.Relativity}
+		// Variable offsets are no longer set by the time it reaches
+		// this point in the code, so identify it by negating BOF and EOF.
+		if sequence.Relativity != BOF && sequence.Relativity != EOF {
+			data[anchorField] = []string{variableAnchor}
+		}
+
 		data[offsetField] = []string{strconv.Itoa(sequence.Offset)}
 		data[maxOffsetField] = []string{strconv.Itoa(sequence.MaxOffset)}
 	}
