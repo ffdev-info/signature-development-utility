@@ -71,11 +71,6 @@ function disableRemove() {
     }
 }
 
-// _makeElementName returns to us an element name nicely formatted.
-function _makeElementName(elemName, idNo) {
-    return "#".concat(elemName, idNo)
-}
-
 // _setIDandName in a single bound.
 function _setIDAndName(elem, value) {
     elem.attr("name", value);
@@ -86,14 +81,22 @@ function _setIDAndName(elem, value) {
 // append them to the DOM for submission via the DOM.
 function cloneAndAdd() {
 
+    // Standard form fields that we'll clone and repopulate.
+    const inputs = "#inputs"
     const maxInputs = 3;
     const clonedInput = ".cloned-input"
-    const cloned = "cloned-input-";
-    const sig = "signature-input-";
-    const rel = "signature-relativity-";
-    const off = "offset-";
-    const max = "max-offset-";
+    const cloned = "#cloned-input-0";
+    const sig = "#signature-input-0";
+    const rel = "#signature-relativity-0";
+    const off = "#offset-0";
+    const max = "#max-offset-0";
     const disable = "disabled";
+
+    // Element fields that we want to look for.
+    const idField = "id"
+    const placeholderField = "placeholder";
+    const valueField = "value";
+    const selectedAttr = "selected";
 
     // This loosely represents a PDF signature which means the utility
     // can also be used for demonstration purposes out of the box.
@@ -115,24 +118,18 @@ function cloneAndAdd() {
     newIDX = len++;
 
     newID = "".concat(cloned, newIDX);
-    newSig = "".concat(sig, newIDX);
-    newRel = "".concat(rel, newIDX);
-    newOff = "".concat(off, newIDX);
-    newMax = "".concat(max, newIDX);
 
-    clone = $(_makeElementName(cloned, "0")).clone();
-    clone.attr("id", newID);
+    clone = $(cloned).clone();
+    clone.attr(idField, newID);
 
-    signature = clone.find(_makeElementName(sig, "0"));
-    relativity = clone.find(_makeElementName(rel, "0"));
-    offset = clone.find(_makeElementName(off, "0"));
-    maxOffset = clone.find(_makeElementName(max, "0"));
+    signature = clone.find(sig);
+    relativity = clone.find(rel);
 
-    signature.attr("placeholder", placeholder[newIDX]);
-    signature.attr("value", placeholder[newIDX]);
-    relativity.val(anchor[newIDX]).attr("selected", "selected");
+    signature.attr(placeholderField, placeholder[newIDX]);
+    signature.attr(valueField, placeholder[newIDX]);
+    relativity.val(anchor[newIDX]).attr(selectedAttr, selectedAttr);
 
-    clone.appendTo("#inputs");
+    clone.appendTo(inputs);
 
     // Check whether or not we need to disable the append button.
     len = $(clonedInput).length;
