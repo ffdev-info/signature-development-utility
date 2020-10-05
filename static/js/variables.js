@@ -87,7 +87,7 @@ var newSignatureSequences = `
       </div><div class="ten columns">
         <input
           name="PLACEHOLDER"
-          class="u-full-width signature"
+          class="u-full-width signature-container"
           type="text"
           placeholder="68656C6C6F20776F726C6421"
           value=""
