@@ -1,146 +1,182 @@
 <div id="Guide" class="tab" style="display:none">
-    <!--<h2>Guide</h2>-->
-      <h4>Container signatures</h4>
-      More information on <a target="_blank" href="https://openpreservation.org/blogs/droid-container-signature-files-what-they-are-and-how-to-create-them-a-template-and-an-example-or-few/">
-        DROID container signatures.
-      </a>
-      <br/><br/>
-      <h4>Standard signatures</h4>
-      More information on DROID signatures and their syntax:
-      <br/><br/>
-      <p>
-      In PRONOM, an internal signature is composed of one or more byte
-      sequences, each comprising a continuous sequence of hexadecimal
-      bytes values and, optionally, regular expressions. A signature byte
-      sequence is modelled by describing its starting position within a
-      bitstream and its value.
-      <br/><br/>
-      The starting position can be one of two basic types:
-      <br/><br/>
-      Absolute: The byte sequence starts at a fixed position within the
-      bitstream. The position is described as an offset from either the
-      beginning or the end of the bitstream. The byte sequence can
-      therefore be located by moving to the specified offset, counting
-      from either the beginning of file or end of file position. If
-      counting from either the EOF position, the offset is to the final
-      byte in the sequence.
-      <br/><br/>
-      Variable: The byte sequence can start at any offset within the
-      bitstream. The byte sequence can be located by examining the entire
-      bitstream.
-      <br/><br/>
-      The value of the byte sequence is defined as a sequence of
-      hexadecimal values, optionally incorporating any of the following
-      regular expressions:
-      <br/><br/>
+   <h4>Installing signatures</h4>
+   Information on signature development and syntax can be found below. Once you
+   have something ready to go you can use signatures from this utility in DROID
+   and Siegfried.
+   <br/><br/>
+   <h5>DROID</h5>
+   DROID signatures need to be installed in the <code>.droid6</code> folder in
+   either Windows or Linux. On Windows this folder will be in <code>%HOMEPATH%</code>,
+   e.g. <code>\user\{{username}}</code>. And in Linux <code>/home/{{username]}/.droid6</code>.
+   Standard signatures are installed in <code>signature_files</code> and container signature
+   files are installed in <code>container_sigs</code>.
+   <br/><br/>
+   When you run the DROID user interface you can navigate to <code><b>tools -> preferences</b></code> to
+   then select your new development signature files.
+   <br/><br/>
+   <h5>Siegfried</h5>
+   Similarly for Siegfried, there is a siegfried home directory. Using the above
+   pattern, the siegfried example on Linux will be: <code>/home/{{username}}/siegfried</code>.
+   <br/><br/>
+   You simply need to have the two Signature files in this directory and then
+   run the following using Siegfried's <code>roy</code> tool:
+   <br/><br/>
+   <pre class="nospace">$ roy build -droid {{your-signature-file-name}}.xml \
+    -noreports \
+    -container {{your-container-signature-file-name}}.xml</pre>
 
-      <dl>
+   <br/>
 
-      <dt>
-      <b>??:</b> wildcard matching any pair of hexadecimal values (i.e. a
-      single byte).
-      </dt>
-      <br/>
-      <dd>
-      e.g.: 0x0A FF ?? FE would match 0x0A FF 6C FE or 0x0A FF 11 FE.
-      </dd>
-      <br/>
+   <h5>A brief note about container signatures</h5>
+   If you are developing a container signature for a format already recorded in
+   PRONOM you only need to worry about creating and using a container signature
+   file from this utility. It is only for novel formats you may consider writing
+   a standard signature file too.
+   <br/><br/>
+   <h4>Syntax</h4>
+   <h5>Container signatures</h5>
+   More information on <a target="_blank" href="https://openpreservation.org/blogs/droid-container-signature-files-what-they-are-and-how-to-create-them-a-template-and-an-example-or-few/">
+     DROID container signatures.
+   </a>
+   <br/>
+   Additional <a target="_blank" href="https://github.com/digital-preservation/droid/blob/de8fca984c1ba2f6487579b7dc2e41136cf56fae/Signature%20syntax.md">container signature syntax.</a>
+   <br/><br/>
+   <h5>Standard signatures</h5>
+   More information on DROID signatures and their syntax:
+   <br/><br/>
+   <p>
+   In PRONOM, an internal signature is composed of one or more byte
+   sequences, each comprising a continuous sequence of hexadecimal
+   bytes values and, optionally, regular expressions. A signature byte
+   sequence is modelled by describing its starting position within a
+   bitstream and its value.
+   <br/><br/>
+   The starting position can be one of two basic types:
+   <br/><br/>
+   <b>Absolute:</b> The byte sequence starts at a fixed position within the
+   bitstream. The position is described as an offset from either the
+   beginning or the end of the bitstream. The byte sequence can
+   therefore be located by moving to the specified offset, counting
+   from either the beginning of file or end of file position. If
+   counting from either the EOF position, the offset is to the final
+   byte in the sequence.
+   <br/><br/>
+   <b>Variable:</b> The byte sequence can start at any offset within the
+   bitstream. The byte sequence can be located by examining the entire
+   bitstream.
+   <br/><br/>
+   The value of the byte sequence is defined as a sequence of
+   hexadecimal values, optionally incorporating any of the following
+   regular expressions:
+   <br/>
 
-      <dt>
-      <b>*:</b> wildcard matching any number of bytes (0 or more).
-      </dt>
-      <br/>
-      <dd>
-      e.g.: 0x0A FF * FE would match 0x0A FF 6C FE or 0x0A FF 6C 11 FE.
-      </dd>
-      <br/>
-      <dt>
-      <b>{n}:</b> wildcard matching n bytes, where n is an integer.
-      </dt>
-      <br/>
-      <dd>
-      e.g.: 0x1C 20 {2} 4E 12 would match 0x1C 20 FF 15 4E 12.
-      </dd>
-      <br/>
-      <dt>
-      <b>{m-n}:</b> wildcard matching between m-n bytes inclusive, where
-      m and n are integers or ‘*’.
-      </dt>
-      <br/>
-      <dd>
-      e.g.: 0x03 {1-2} 4D would match 0x03 3C 4D or 0x03 3C 88 4D.
-      <br/><br/>
-      e.g.: 0x03 {2-*} 4D would match 0x03 3C 88 4D or 0x03 3C 88 3F 4D.
-      </dd>
-      <br/>
-      <dt>
-      <b>(a|b):</b> wildcard matching one from a list of values (e.g. a
-      or b), where each value is a hexadecimal byte sequence of arbitrary
-      length containing no wildcards.
-      </dt>
-      <br/>
-      <dd>
-      e.g.: 0x0E (FF|FE) 17 would match 0x0E FF 17 or 0x0E FE 17.
-      </dd>
-      <br/>
-      <dt>
-      <b>[a:b]:</b> wildcard matching any sequence of bytes which lies
-      lexicographically between a and b, inclusive (where both a and b
-      are byte sequences of the same length, containing no wildcards, and
-      where a is less than b).  The endian-ness of a and b are the same
-      as the endian-ness of the signature as a whole.
-      </dt>
-      <br/>
-      <dd>
-      e.g. 0xFF [09:0B] FF would match 0xFF 09 FF, 0xFF 0A FF or 0xFF 0B
-      FF.
-      </dd>
-      <br/>
-      <dt>
-      <b>[!a]:</b> wildcard matching any sequence of bytes other than a
-      itself (where a is a byte sequence containing no wildcards).
-      </dt>
-      <br/>
-      <dd>
-      e.g. 0xFF [!09] FF would match 0xFF 0A FF, but not 0xFF 09 FF.
-      Digital Preservation Technical Paper 1: Automatic Format
-      Identification Using PRONOM and DROID Page 9 of 33
-      </dd>
-      <br/>
-      <dt>
-      <b>[!a:b]:</b> wildcard matching any sequence of bytes which does
-      not lie lexicographically between a and b, inclusive (where a and
-      b are both byte sequences of the same length, containing no
-      wildcards, and where a is less than b).
-      </dt>
-      <br/>
-      <dd>
-      e.g. 0xFF [!01:02] FF would match 0xFF 00 FF and 0xFF 03 FF, but
-      not 0xFF 01 FF or 0xFF 02 FF.
-      </dd>
-      </dl>
+   <dl>
 
-      Note: In the examples above, spaces are included between byte
-      values for reasons of clarity, but are omitted in actual byte
-      sequence values. The signature is processed left-to-right if the
-      signature is measured relative to BOF and right-to-left if measured
-      relative to EOF. The endian-ness of the signature is only relevant
-      for sequences inside square brackets. A byte sequence must contain
-      a fixed subsequence of at least one byte between each occurrence of
-      ‘*’, or between the beginning or end of the sequence and an
-      occurrence of ‘*’. Thus, sequences of the following form are not
-      permitted:
-      <br/><br/>
-      [BOF] (a|b)*…
-      <br/><br/>
-      …*(a|b) [EOF]
-      <br/><br/>
-      …*(a|b)*...
-      <br/><br/>
-      <i>Please help improve this resource by visiting
-        <a href="https://github.com/exponential-decay/signature-development-utility">
-          GitHub</a> and making a pull-request there.</i>
-      <br/><br/>
-      <br/><br/>
-    </div>
+   <dt>
+   <b>??:</b> wildcard matching any pair of hexadecimal values (i.e. a
+   single byte).
+   </dt>
+   <br/>
+   <dd>
+   e.g.: 0x0A FF ?? FE would match 0x0A FF 6C FE or 0x0A FF 11 FE.
+   </dd>
+   <br/>
+
+   <dt>
+   <b>*:</b> wildcard matching any number of bytes (0 or more).
+   </dt>
+   <br/>
+   <dd>
+   e.g.: 0x0A FF * FE would match 0x0A FF 6C FE or 0x0A FF 6C 11 FE.
+   </dd>
+   <br/>
+   <dt>
+   <b>{n}:</b> wildcard matching n bytes, where n is an integer.
+   </dt>
+   <br/>
+   <dd>
+   e.g.: 0x1C 20 {2} 4E 12 would match 0x1C 20 FF 15 4E 12.
+   </dd>
+   <br/>
+   <dt>
+   <b>{m-n}:</b> wildcard matching between m-n bytes inclusive, where
+   m and n are integers or ‘*’.
+   </dt>
+   <br/>
+   <dd>
+   e.g.: 0x03 {1-2} 4D would match 0x03 3C 4D or 0x03 3C 88 4D.
+   <br/><br/>
+   e.g.: 0x03 {2-*} 4D would match 0x03 3C 88 4D or 0x03 3C 88 3F 4D.
+   </dd>
+   <br/>
+   <dt>
+   <b>(a|b):</b> wildcard matching one from a list of values (e.g. a
+   or b), where each value is a hexadecimal byte sequence of arbitrary
+   length containing no wildcards.
+   </dt>
+   <br/>
+   <dd>
+   e.g.: 0x0E (FF|FE) 17 would match 0x0E FF 17 or 0x0E FE 17.
+   </dd>
+   <br/>
+   <dt>
+   <b>[a:b]:</b> wildcard matching any sequence of bytes which lies
+   lexicographically between a and b, inclusive (where both a and b
+   are byte sequences of the same length, containing no wildcards, and
+   where a is less than b).  The endian-ness of a and b are the same
+   as the endian-ness of the signature as a whole.
+   </dt>
+   <br/>
+   <dd>
+   e.g. 0xFF [09:0B] FF would match 0xFF 09 FF, 0xFF 0A FF or 0xFF 0B
+   FF.
+   </dd>
+   <br/>
+   <dt>
+   <b>[!a]:</b> wildcard matching any sequence of bytes other than a
+   itself (where a is a byte sequence containing no wildcards).
+   </dt>
+   <br/>
+   <dd>
+   e.g. 0xFF [!09] FF would match 0xFF 0A FF, but not 0xFF 09 FF.
+   Digital Preservation Technical Paper 1: Automatic Format
+   Identification Using PRONOM and DROID Page 9 of 33
+   </dd>
+   <br/>
+   <dt>
+   <b>[!a:b]:</b> wildcard matching any sequence of bytes which does
+   not lie lexicographically between a and b, inclusive (where a and
+   b are both byte sequences of the same length, containing no
+   wildcards, and where a is less than b).
+   </dt>
+   <br/>
+   <dd>
+   e.g. 0xFF [!01:02] FF would match 0xFF 00 FF and 0xFF 03 FF, but
+   not 0xFF 01 FF or 0xFF 02 FF.
+   </dd>
+   </dl>
+
+   Note: In the examples above, spaces are included between byte
+   values for reasons of clarity, but are omitted in actual byte
+   sequence values. The signature is processed left-to-right if the
+   signature is measured relative to BOF and right-to-left if measured
+   relative to EOF. The endian-ness of the signature is only relevant
+   for sequences inside square brackets. A byte sequence must contain
+   a fixed subsequence of at least one byte between each occurrence of
+   ‘*’, or between the beginning or end of the sequence and an
+   occurrence of ‘*’. Thus, sequences of the following form are not
+   permitted:
+   <br/><br/>
+   [BOF] (a|b)*…
+   <br/><br/>
+   …*(a|b) [EOF]
+   <br/><br/>
+   …*(a|b)*...
+   <br/><br/>
+   <i>Please help improve this resource by visiting
+     <a href="https://github.com/exponential-decay/signature-development-utility">
+       GitHub</a> and making a pull-request there.</i>
+   <br/><br/>
+   <br/><br/>
+ </div>
 </div>
