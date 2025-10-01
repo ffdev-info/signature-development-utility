@@ -206,7 +206,7 @@
 		$doc1 = $xml->newDOMDocument();
 
 		$signatureFile = $xml->xmlCreateElement('FFSignatureFile', $doc1, $doc1);
-		$xml->xmlAddAttribute('Version', '1', $doc1, $signatureFile);
+		$xml->xmlAddAttribute('Version', $_POST['fileVer1'] ?? 1, $doc1, $signatureFile);
 		$xml->xmlAddAttribute('xmlns', $xmlns, $doc1, $signatureFile);
 
 		$xml->xmlAddAttribute('DateCreated', $date->format(DateTime::W3C), $doc1, $signatureFile);

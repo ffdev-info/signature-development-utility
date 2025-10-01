@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/exponential-decay/signature-development-utility/pkg/sigdevutil"
+	"github.com/ffdev-info/signature-development-utility/pkg/sigdevutil"
 )
 
 var (
