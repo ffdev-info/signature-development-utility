@@ -1,5 +1,5 @@
 /* Additional CSS */
- 
+
 textarea.results {
     height: 600px;
     font-family: 'Courier New', Courier, monospace;
@@ -23,6 +23,6 @@ div.info {
 }
 
 .info {
-  background-color: #e7f3fe;
+  background-color: #222;
   border-left: 6px solid #2196F3;
 }

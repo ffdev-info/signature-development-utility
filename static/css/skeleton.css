@@ -125,7 +125,8 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #222; }
+  background-color: #181a1b;
+  color: #d3cfc9; }
 
 
 /* Typography
@@ -173,7 +174,7 @@ input[type="button"] {
   display: inline-block;
   height: 36px;
   padding: 0 31px;
-  color: #555;
+  color: #d3cfc9;
   text-align: center;
   font-size: 10px;
   font-weight: 600;
@@ -184,7 +185,7 @@ input[type="button"] {
   white-space: nowrap;
   background-color: transparent;
   border-radius: 4px;
-  border: 1px solid #bbb;
+  border: 1px solid #43494c;
   cursor: pointer;
   box-sizing: border-box; }
 .button:hover,
@@ -197,17 +198,17 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-  color: #333;
-  border-color: #888;
+  color: #bdc3bc;
+  border-color: #52585c;
   outline: 0; }
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
-  color: #FFF;
-  background-color: #cc372f;
-  border-color: #cc372f; }
+  color: #e8e6e3;
+  background-color: #a32c26;
+  border-color: #a32c26; }
 .button.button-primary:hover,
 button.button-primary:hover,
 input[type="submit"].button-primary:hover,
@@ -218,9 +219,9 @@ button.button-primary:focus,
 input[type="submit"].button-primary:focus,
 input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
-  color: #FFF;
-  background-color: #dd372f;
-  border-color: #dd372f; }
+  color: #e8e6e3;
+  background-color: #a9221c;
+  border-color: #a9221c; }
 
 
 /* Forms
@@ -236,8 +237,8 @@ textarea,
 select {
   height: 38px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
-  background-color: #fff;
-  border: 1px solid #D1D1D1;
+  background-color: #181a1b;
+  border: 1px solid #3d4245;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
@@ -311,8 +312,8 @@ code {
   margin: 0 .2rem;
   font-size: 90%;
   white-space: nowrap;
-  background: #F1F1F1;
-  border: 1px solid #E1E1E1;
+  background: #202324;
+  border: 1px solid #383d40;
   border-radius: 4px; }
 pre > code {
   display: block;
@@ -377,7 +378,7 @@ hr {
   margin-top: 3rem;
   margin-bottom: 3.5rem;
   border-width: 0;
-  border-top: 1px solid #E1E1E1; }
+  border-top: 1px solid #3d4245; }
 
 
 /* Clearing

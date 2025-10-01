@@ -49,14 +49,14 @@ input.signature {
 
 p.gh {
 	font-family: courier;
-	font-color: black;
+	color: #d3cfc9;
 }
 
 a {
-	color: black;
+	color: #d3cfc9;
 }
 a:visited {
-	color: black;
+	color: #d3cfc9;
 }
 
 pre.nospace {
