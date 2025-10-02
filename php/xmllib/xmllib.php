@@ -3,8 +3,8 @@
 //Lightweight wrapper for PHP DOM Libraries to be added to as required.
 //Currently used by web service handling scripts to generate xml.
 
-//TODO: Could / should (?) optimise by removing $doc option from half these 
-//		  functions and placing in a member variable. 
+//TODO: Could / should (?) optimise by removing $doc option from half these
+//		  functions and placing in a member variable.
 
 class XMLHelper
 {
@@ -14,8 +14,8 @@ class XMLHelper
 	*
 	* Description	: create and return a new DOM Object
 	*
-	* parameters	: n/a	
-	*          
+	* parameters	: n/a
+	*
 	* Returns		: $doc - DOM object / document
 	*
 	*********************************************************************/
@@ -37,7 +37,7 @@ class XMLHelper
 	*					  $namespace - optional namespace
 	*					  $doc - DOM document
 	*					  $parent - parent element to append new element
-	*          
+	*
 	* Returns		: $element - xml root element
 	*
 	*********************************************************************/
@@ -47,9 +47,9 @@ class XMLHelper
 			$element = $doc->createElement($name);
 		else
 			$element = $doc->createElementNS($namespace, $name);
-		
-		$parent->appendChild($element);	
-		return $element;	
+
+		$parent->appendChild($element);
+		return $element;
 	}
 
 	/*********************************************************************
@@ -61,17 +61,17 @@ class XMLHelper
 	* parameters	: $name - name of element
 	*					  $doc - DOM document
 	*					  $parent - parent element to append new element
-	*          
+	*
 	* Returns		: new xml node
 	*
 	*********************************************************************/
 	public function xmlCreateElement($name, $doc, $parent)
 	{
-		$element = $doc->createElement($name); 
+		$element = $doc->createElement($name);
 		$parent->appendChild($element);
 		return $element;
 	}
-	
+
 	/*********************************************************************
 	*
 	* Function		: xmlCreateTextElement
@@ -82,18 +82,18 @@ class XMLHelper
 	*					  $value - value of text to add to element
 	*					  $doc - DOM document
 	*					  $parent - parent element to append new element
-	*          
+	*
 	* Returns		: new xml node
 	*
 	*********************************************************************/
 	public function xmlCreateTextElement($name, $value, $doc, $parent)
 	{
-		$element = $doc->createElement($name); 
+		$element = $doc->createElement($name);
 		$parent->appendChild($element);
 		$this->xmlAddTextValue($value, $doc, $element);
 		return $element;
-	}	
-	
+	}
+
 	/*********************************************************************
 	*
 	* Function		: xmlAddAttribute
@@ -104,40 +104,40 @@ class XMLHelper
 	*					  $value - value to give attribute
 	*					  $doc - DOM document
 	*					  $parent - parent element to append new attribute
-	*          
+	*
 	* Returns		: n/a
 	*
 	*********************************************************************/
 	public function xmlAddAttribute($name, $value, $doc, $parent)
 	{
-		$attribute = $doc->createAttribute($name); 
+		$attribute = $doc->createAttribute($name);
 		$this->xmlAddTextValue($value, $doc, $attribute);
-		$parent->appendChild($attribute); 	
+		$parent->appendChild($attribute);
 	}
-	
+
 	/*********************************************************************
 	*
 	* Function		: xmlAddTextValue
 	*
 	* Description	: public function to add text values to nodes or attributes
-	*					  wraps the function to be used inside 'this' class or 
-	*					  externally if required. 
+	*					  wraps the function to be used inside 'this' class or
+	*					  externally if required.
 	*
 	* parameters	: $value - text value for element or attribute
 	*					  $doc - DOM document
 	*					  $parent - parent element to append value
-	*          
+	*
 	* Returns		: n/a
 	*
 	*********************************************************************/
-	//add a text value to xml node or attribute. used inside this 
+	//add a text value to xml node or attribute. used inside this
 	//class for attributes or externally when working on the DOM...
 	public function xmlAddTextValue($value, $doc, $parent)
 	{
 		$textValue = $doc->createTextNode($value);
 		$parent->appendChild($textValue);
 	}
-	
+
 	/*********************************************************************
 	*
 	* Function		: xmlOutput
@@ -146,14 +146,14 @@ class XMLHelper
 	*					  set http header to allow browser to handle correctly.
 	*
 	* parameters	: $doc - DOM document
-	*          
+	*
 	* Returns		: outputs xml to browser
 	*
 	*********************************************************************/
 	public function xmlOutput($doc)
 	{
 	  header ('Content-Type: text/xml');
-	  print $doc->saveXML();		
+	  print $doc->saveXML();
 	}
 
 	/*********************************************************************
@@ -166,7 +166,7 @@ class XMLHelper
 	*					  $xml2 - secondary XML to be appended
 	*					  $xml1_parent - primary node to afix secondary DOM to
 	*					  $xml2_node - secondary node from which to afix DOM
-	*          
+	*
 	* Returns		: new XML document
 	*
 	*********************************************************************/
@@ -176,7 +176,7 @@ class XMLHelper
 		//combining two DOM objects is a fairly precarious operation depending
 		//a lot of calling class/function. Add better error handling. Fix variable
 		//names.
-	
+
 		//TODO: assumption made here that we have a DOM object. Need better checking
 		if(!is_object($xml1))
 		{
@@ -188,7 +188,7 @@ class XMLHelper
 		{
 			$doc1 = $xml1;
 		}
-		
+
 		if(!is_object($xml2))
 		{
 			$doc2 = new DOMDocument();
@@ -203,10 +203,10 @@ class XMLHelper
 		$node = $doc2->getElementsByTagName($xml2_node)->item(0);
 		$new_node = $doc1->importNode($node, true);
 		$doc1->getElementsByTagName($xml1_parent)->item(0)->appendChild($new_node);
-	
+
 		//TODO: return DOM or XML... function parameter (?)
 		return $doc1->saveXML();
-	}	
+	}
 }
 
 ?>

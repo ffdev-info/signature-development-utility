@@ -22,7 +22,7 @@
             120
         ],
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "[go]": {
         "editor.rulers": [

@@ -1,11 +1,7 @@
-#PRONOM Technical Paper One
+# PRONOM Technical Paper One
 
-Documentation used to develop the singature utility. 
+Documentation used to develop the signature utility.
 
-Original source: http://www.nationalarchives.gov.uk/aboutapps/pronom/ 
+Original source: [nationalarchives.gov.uk/aboutapps/pronom/][pro-1]
 
-###License
-
-Ownership is that of The National Archives, UK.
-
-**OGL:** http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/ 
+[pro-1]: http://www.nationalarchives.gov.uk/aboutapps/pronom/

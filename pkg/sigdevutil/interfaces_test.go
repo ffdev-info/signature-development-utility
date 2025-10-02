@@ -29,10 +29,10 @@ func setupSignatureInterface() SignatureInterface {
 	return sig
 }
 
-// TestStandardSingatureGeneration will test the standard signature
+// TestStandardSignatureGeneration will test the standard signature
 // generation to make sure we're making something we know that works
 // with DROID.
-func TestStandardSingatureGeneration(t *testing.T) {
+func TestStandardSignatureGeneration(t *testing.T) {
 	// Replace time.Now() with a placeholder we can guarantee the result
 	// of when we call it.
 	now = func() time.Time { return time.Date(1970, 1, 1, 0, 0, 0, 651387237, time.UTC) }
@@ -84,12 +84,12 @@ func setupContainerSignatureInterface() ContainerSignatureInterface {
 // container signature files compatible with DROID.
 func TestContainerSignatureGeneration(t *testing.T) {
 	signatureInterface := setupContainerSignatureInterface()
-	containerSingatureFile := signatureInterface.ToDROIDContainer()
+	containerSignatureFile := signatureInterface.ToDROIDContainer()
 	// Compare the output with our fixture.
-	if containerSingatureFile.String() != containerSignatureOne {
+	if containerSignatureFile.String() != containerSignatureOne {
 		t.Errorf(
 			"Test XML doesn't match expected XML, outputting test XML: %s",
-			containerSingatureFile.String(),
+			containerSignatureFile.String(),
 		)
 	}
 }

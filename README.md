@@ -32,13 +32,13 @@ To run the PHP server, you first need to install `php-dom` with
 
 And then to run up the server: `php -S localhost:8000`
 
-#### Custom ports:
+#### Custom ports
 
 You can also run this using custom ports e.g.
 
 * `./signature-development-utility -port 80 -bootstrap 8000`
 
-## Legacy version...
+## Legacy version
 
 The first iteration of this application is hosted by
 [The National Archives][tna-1] and mirrored on [my own site][expo-1]. It is

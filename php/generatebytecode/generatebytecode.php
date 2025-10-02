@@ -1,5 +1,5 @@
-<?php 
-		
+<?php
+
 include_once("xmllib/xmllib.php");
 
 class SignatureCollection
@@ -14,7 +14,7 @@ class ByteSequence
 	public $position;
 	public $offset = 0;
 	public $maxoffset = 0;
-	public $byte_sequence;	
+	public $byte_sequence;
 }
 
 class SignatureGenerator
@@ -26,7 +26,7 @@ class SignatureGenerator
 
 	//maintain an array of values for subsequence
 	private $suboffs = array();
-	
+
 	private $minFragLen 	= 0;
 	private $eof	 		= false;
 	private $varoff		= false;
@@ -38,7 +38,7 @@ class SignatureGenerator
 	* Description	:  description...
 	*
 	* parameters	: 	$doc pointer to xml document
-	*          
+	*
 	* Returns		:  n/a
 	*
 	*********************************************************************/
@@ -46,21 +46,21 @@ class SignatureGenerator
 	{
 	  //output the xml...
 	  header ('Content-Type: text/xml');
-	  print $doc->saveXML();		
+	  print $doc->saveXML();
 	}
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
 	* Description	:  description...
 	*
-	* parameters	: 	
-	*          
+	* parameters	:
+	*
 	* Returns		:  n/a
 	*
 	*********************************************************************/
-	public function generateSignatureFromObject($signature_collection) 
+	public function generateSignatureFromObject($signature_collection)
 	{
 		$xml = new XMLHelper();
 		unset($doc);
@@ -68,15 +68,15 @@ class SignatureGenerator
 		$doc = $xml->newDOMDocument();
 		$is = $xml->xmlCreateElement('InternalSignature', $doc, $doc);
 
-		$xml->xmlAddAttribute('ID', $signature_collection->sig_id, $doc, $is);	
-		$xml->xmlAddAttribute('Specificity', $signature_collection->specificity, $doc, $is);	
+		$xml->xmlAddAttribute('ID', $signature_collection->sig_id, $doc, $is);
+		$xml->xmlAddAttribute('Specificity', $signature_collection->specificity, $doc, $is);
 
 		for($x = 0; $x < sizeof($signature_collection->byteSequence); $x++)
 		{
 			unset($this->suboffs);
 			$this->bofMax 		= 0;
 			$this->eofMax 		= 0;
-		
+
 			$byte = $signature_collection->byteSequence[$x];
 
 			//most basic thing we can do to ease validation...
@@ -100,11 +100,11 @@ class SignatureGenerator
 
 				//Once we've got our subsequences below we can output the xml nodes for
 				//the values we've gathered...
-				$subsequences[$i] = $this->stripCurlyWildcards($subsequences[$i], $bFirst, $bLast);		
+				$subsequences[$i] = $this->stripCurlyWildcards($subsequences[$i], $bFirst, $bLast);
 			}
 
-			$len_offset_array = sizeof($this->suboffs);	
-			for($head=1; $head < $len_offset_array-1; $head+=2)		
+			$len_offset_array = sizeof($this->suboffs);
+			for($head=1; $head < $len_offset_array-1; $head+=2)
 			{
 				//get the value from the head of the next subsequence
 				//and store in a temporary variable to add to the tail of the current
@@ -113,31 +113,31 @@ class SignatureGenerator
 					$tmp = $this->suboffs[$head+1];
 					unset($this->suboffs[$head+1]);		//unset head from array to contract values
 				}
-		
+
 				//new tail... add head value...
 				if($head != 0 && $head != ($len_offset_array-1))
 				{
 					$this->suboffs[$head] = $this->suboffs[$head] += $tmp;
 				}
-			}			
+			}
 
 			$this->suboffs = array_values($this->suboffs);
-			
+
 			$this->suboffs[0] = $this->suboffs[0] += $offset;
 			$this->suboffs[sizeof($this->suboffs)-1] = $this->suboffs[sizeof($this->suboffs)-1] += $offset;
 
 			$this->bofMax += $max;
 			$this->eofMax += $max;
-			
-			if($this->eof) 
-			{ 
+
+			if($this->eof)
+			{
 				unset($this->suboffs[0]);
 				$this->suboffs = array_values($this->suboffs);
 				$this->eofMax += end($this->suboffs);
 			}
 			else
 			{
-				$this->bofMax += $this->suboffs[0];		
+				$this->bofMax += $this->suboffs[0];
 			}
 
 			//need to do some work to bring some of this code together... member variables?
@@ -150,22 +150,22 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	:  
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	private function bringXMLTogether($doc, $is, $subsequences, $anchor, $offset, $max, $xml)
 	{
 		$byteSeq = $xml->xmlCreateElement('ByteSequence', $doc, $is);
-		
+
 		if($this->varoff === false)
 		{
-			$xml->xmlAddAttribute('Reference', $anchor, $doc, $byteSeq);	
+			$xml->xmlAddAttribute('Reference', $anchor, $doc, $byteSeq);
 		}
 
 		for($i = 0; $i < sizeof($subsequences); $i++)
@@ -173,7 +173,7 @@ class SignatureGenerator
 			//Within subsequence tags is the breakdown of the rest of the signatue...
 			//longest sequence, left right fragments etc. output using the functions below...
 			$subSeq = $xml->xmlCreateElement('SubSequence', $doc, $byteSeq);
-		
+
 			$fragment_longest_pair = $this->longestUnambiguousSequence($subsequences[$i]);
 			$this->handleStringFragments($fragment_longest_pair, $doc, $subSeq, $xml);
 
@@ -183,8 +183,8 @@ class SignatureGenerator
 			$this->Len = 0;
 			//reset minfraglength to zero for next fragment...
 			$this->minFragLen = 0;
-		
-			$xml->xmlAddAttribute('Position', $i+1, $doc, $subSeq);		
+
+			$xml->xmlAddAttribute('Position', $i+1, $doc, $subSeq);
 
 			if($this->varoff === false)
 			{
@@ -197,7 +197,7 @@ class SignatureGenerator
 					$xml->xmlAddAttribute('SubSeqMaxOffset', $this->eofMax, $doc, $subSeq);
 				}
 			}
-						
+
 			$xml->xmlAddAttribute('SubSeqMinOffset', $this->suboffs[$i], $doc, $subSeq);
 
 		}
@@ -207,34 +207,34 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	:  
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	private function splitIntoSubsequences($string)
 	{
 		$subsequences = array();
 		$asterisk_count = substr_count($string, '*');
-		
+
 		if ($asterisk_count)
 		{
 			for($i = 0; $i < $asterisk_count; $i++)
 			{
 				$pos = strpos($string,'*');
-				
-				
+
+
 				$bracket_test = substr($string, $pos, 2);
 
 				//if asterisk appears within a bracket split but handle differently
 				if(strpos($bracket_test, '}'))
 				{
 					$subsequences[] = substr($string, 0, $pos+2);
-					$string = substr($string, $pos+2);		
+					$string = substr($string, $pos+2);
 				}
 				else	//we can simply split the string as in normal circumstances
 				{
@@ -247,20 +247,20 @@ class SignatureGenerator
 		//should have one fragment left from loop, add to array...
 		//or put frag in here if no wildcards...
 		$subsequences[] = $string;
-		
+
 		return $subsequences;
 	}
-	
+
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	:  
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	private function stripCurlyWildcards($string, $bFirst, $bLast)
@@ -287,10 +287,10 @@ class SignatureGenerator
 		//reverse string, look for first occurrence
 		//of closing curly bracket '}'...
 		$string = strrev($string);
-		
+
 		$s_pos = strpos($string, '}');
 		if(is_bool($s_pos) != true)
-		{		
+		{
 			if($s_pos == 0)
 			{
 				$len = strpos($string, '{') + 1;
@@ -303,10 +303,10 @@ class SignatureGenerator
 		$string = strrev($string);
 
 		//Strip wildcard vals of hypens and record value pair
-		if ($start) 
-		{ 
+		if ($start)
+		{
 			$optarr1 = $this->getBracketedValues('-', $start);
-						
+
 			if(sizeof($optarr1) == 2)
 			{
 				if($optarr1[MAX_] == '*')
@@ -318,7 +318,7 @@ class SignatureGenerator
 					$optarr1[MAX_] = 0;		//means little, only affects BOF or EOF if we have a MAXOFFSET attribute
 				}
 			}
-			
+
 			//add the difference between the two values to max offset, not the entire value again...
 			if($bFirst && sizeof($optarr1) == 2) { $this->bofMax += ($optarr1[MAX_]-$optarr1[MIN_]); }
 			if ($optarr1[MIN_]) { $this->suboffs[] = $optarr1[MIN_]; }
@@ -327,13 +327,13 @@ class SignatureGenerator
 		{
 			$this->suboffs[] = 0;
 		}
-		
-		if ($end) 
-		{ 
+
+		if ($end)
+		{
 			$optarr2 = $this->getBracketedValues('-', $end);
 
 			if(sizeof($optarr2) == 2)
-			{			
+			{
 				if($optarr2[MAX_] == '*')
 				{
 					if($bLast)		//for EOF sequences, if we have * it is variable...
@@ -358,14 +358,14 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
 	* Description	:  given a string find longest unambiguous sequence
 	*						i.e. longest sequence that doesn't contain syntax
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	private function longestUnambiguousSequence($string)
@@ -379,11 +379,11 @@ class SignatureGenerator
 			$frag_stored = false;
 
 			$char = $string[$i];
-		
-			// ?? {n} {k-m} (a|b) [!a:b]	
+
+			// ?? {n} {k-m} (a|b) [!a:b]
 			if ($char == '?' || $char == '{'
 				|| $char == '(' || $char == '[')
-			{				
+			{
 				//if array is empty can take first substring as-is
 				if (sizeof($fragments) == 0)
 				{
@@ -398,7 +398,7 @@ class SignatureGenerator
 					{
 						//should work, but need more data to test...
 						$fragments[] = substr($string, 0, $i);
-						$all_fragments[] = substr($string, 0, $i);						
+						$all_fragments[] = substr($string, 0, $i);
 					}
 
 					switch($char)
@@ -421,13 +421,13 @@ class SignatureGenerator
 							$all_fragments[] = substr($string, $i, (strpos($string, '}') - $i) + 1);
 							$string = substr($string, strpos($string, '}')+1);
 							$this->setStrLen($len, $i, $string);
-							break;				
-						
+							break;
+
 						case '(':
 							$all_fragments[] = substr($string, $i, (strpos($string, ')') - $i) + 1);
 							$string = substr($string, strpos($string, ')')+1);
-							$this->setStrLen($len, $i, $string);	
-							break;			
+							$this->setStrLen($len, $i, $string);
+							break;
 					}
 				}
 			}
@@ -438,7 +438,7 @@ class SignatureGenerator
 			$fragments[] = $string;
 			$all_fragments[] = $string;
 		}
-		
+
 		$maxlen = max(array_map('strlen', $fragments));
 
 		for($i = 0; $i < sizeof($fragments); $i++)
@@ -450,7 +450,7 @@ class SignatureGenerator
 				break;
 			}
 		}
-		
+
 		$frag_return = array();
 		$frag_return[] = $longest_frag;
 		$frag_return[] = $all_fragments;
@@ -459,13 +459,13 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	//reset iterator and string count as required...
@@ -477,13 +477,13 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	//handle the different signature string fragments belonging to a single
@@ -495,22 +495,22 @@ class SignatureGenerator
 
 		$seq = $xml->xmlCreateElement('Sequence', $doc, $parent);
 		$xml->xmlAddTextValue($longest_frag, $doc, $seq);
-		
+
 		$longestLen = strlen($longest_frag) / $this->byte_len;
-		
+
 		//default and value for BOF sequences...
-		$shiftVal = $longestLen; 
-		
+		$shiftVal = $longestLen;
+
 		$seq = $xml->xmlCreateElement('DefaultShift', $doc, $parent);
 
 		if($this->eof)
 		{
 			$shiftVal = -1;
-			$xml->xmlAddTextValue(-($longestLen+1), $doc, $seq);	
+			$xml->xmlAddTextValue(-($longestLen+1), $doc, $seq);
 		}
 		else
 		{
-			$xml->xmlAddTextValue($longestLen+1, $doc, $seq);		
+			$xml->xmlAddTextValue($longestLen+1, $doc, $seq);
 		}
 
 		$uniqueByte = array();
@@ -520,7 +520,7 @@ class SignatureGenerator
 		{
 			$bExists = false;
 			$byte = substr($longest_frag, $i, $this->byte_len);
-	
+
 			for ($j = 0; $j < sizeof($uniqueByte); $j++)
 			{
 				if($byte === $uniqueByte[$j][0])
@@ -530,7 +530,7 @@ class SignatureGenerator
 					break;
 				}
 			}
-			
+
 			if ($bExists === false)
 			{
 				$uniqueByte[] = array($byte, $shiftVal);
@@ -544,7 +544,7 @@ class SignatureGenerator
 			//loop to output xml elements
 			$shift = $xml->xmlCreateElement('Shift', $doc, $parent);
 			$xml->xmlAddTextValue($uniqueByte[$j][1], $doc, $shift);
-			$xml->xmlAddAttribute('Byte', $uniqueByte[$j][0], $doc, $shift);	
+			$xml->xmlAddAttribute('Byte', $uniqueByte[$j][0], $doc, $shift);
 		}
 
 		//arrarys for left and right fragments...
@@ -564,21 +564,21 @@ class SignatureGenerator
 				$first[] = $fragments[$i];
 			}
 		}
-	
+
 		if ($left)  { $this->outputFragPos(true, $left, $doc, $parent, $xml); }
 		if ($right) { $this->outputFragPos(false, $right, $doc, $parent, $xml); }
 
 	}
-	
+
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	private function recombineArray($fragments)
@@ -586,9 +586,9 @@ class SignatureGenerator
 		//array to bring together multiple parts of same fragment
 		//such as those parts of array containing square brackets
 		$recombine_arr = array();
-	
+
 		$string = '';
-	
+
 		for ($i = 0; $i < sizeof($fragments); $i++)
 		{
 			$char = $fragments[$i][0];
@@ -600,34 +600,34 @@ class SignatureGenerator
 			else
 			{
 				if($string != '')
-					$recombine_arr[] = $string;	
-				
+					$recombine_arr[] = $string;
+
 				$string = '';
 				$recombine_arr[] = $fragments[$i];
 			}
 		}
-	
+
 		//Add string remainder to array
 		if($string != '')
-			$recombine_arr[] = $string;	
-	
+			$recombine_arr[] = $string;
+
 		return $recombine_arr;
 	}
-	
+
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
 	*
-	*********************************************************************/	
+	* Returns		:
+	*
+	*********************************************************************/
 	//output correct stuff for left or right fragments...
 	private function outputFragPos($bLeft, $fragments, $doc, $parent, $xml)
-	{	
+	{
 		$fragments = $this->recombineArray($fragments);
 
 		//print_r($fragments);
@@ -639,14 +639,14 @@ class SignatureGenerator
 		{
 			$fragments = array_reverse($fragments, false);
 		}
-		
+
 		$fraglen = 0;
 		//TODO: if bLeft and BOFSequence then min frag calculated from beginning
 		//TODO: if !bLeft and EOFSequence then we calculate from the end minfraglength
-	
-		$string = '';	
+
+		$string = '';
 		$fragPos = 0;
-		
+
 		$minoffset = 0;		//output and reset every time we output string.
 		$maxoffset = 0;
 
@@ -660,7 +660,7 @@ class SignatureGenerator
 			{
 				case '?':
 					//offset count + one byte... output string.
-					
+
 					//potential to have two ?? or more after one another.
 					if(strlen($string) > 0)
 					{
@@ -674,12 +674,12 @@ class SignatureGenerator
 					$minoffset += 1;
 					$maxoffset += 1;
 					$string = '';
-					break; 
-					
+					break;
+
 				case '{':
 					//output $string var and...
 					//values in curly brackets become offset values...
-					
+
 					if(strlen($string) > 0)
 					{
 						$this->fragXMLOutput($orientation, $string, $fragPos+1, $minoffset, $maxoffset, $doc, $parent, $xml);
@@ -688,7 +688,7 @@ class SignatureGenerator
 						$minoffset = 0;
 						$maxoffset = 0;
 					}
-	
+
 					$optarr = $this->getBracketedValues('-', $fragments[$i]);
 
 					if(sizeof($optarr) == 2)
@@ -702,22 +702,22 @@ class SignatureGenerator
 						$maxoffset = $maxoffset + $optarr[0];
 					}
 					//else we've a bum array... not sure what to do.
-					
+
 					$string = '';
 					break;
-					
+
 				case '(':
 					//output $string var and...
 					//output current array string into each of the potential options...
 					if(strlen($string) > 0)
 					{
 						$this->fragXMLOutput($orientation, $string, $fragPos+1, $minoffset, $maxoffset, $doc, $parent, $xml);
-						$fraglen = $this->handleFragLength($fraglen, $minoffset, $string);						
+						$fraglen = $this->handleFragLength($fraglen, $minoffset, $string);
 						$fragPos += 1;
 						$minoffset = 0;
 						$maxoffset = 0;
 					}
-					
+
 					$optarr = $this->getBracketedValues('|', $fragments[$i]);
 
 					//minimum length of stirng in options array to increment min $fraglength
@@ -730,26 +730,26 @@ class SignatureGenerator
 						$this->fragXMLOutput($orientation, $optarr[$j], $fragPos+1, $minoffset, $maxoffset, $doc, $parent, $xml);
 					}
 					$fraglen += $minlen;
-					$fragPos += 1;	
+					$fragPos += 1;
 					$minoffset = 0;
 					$maxoffset = 0;
-					
-					$string = '';	
+
+					$string = '';
 					break;
-			
+
 				default:
 					$string = $string . $fragments[$i];
 					break;
 			}
 		}
-		
+
 		if(strlen($string) > 0)
 		{
 			$this->fragXMLOutput($orientation, $string, $fragPos+1, $minoffset, $maxoffset, $doc, $parent, $xml);
 			$fragPos += 1;
 			$fraglen = $this->handleFragLength($fraglen, $minoffset, $string);
 		}
-		
+
 		//output the fragment length count here as required...
 		if (!$this->eof && $bLeft)
 		{
@@ -757,26 +757,26 @@ class SignatureGenerator
 		}
 		elseif ($this->eof && $bLeft == false)
 		{
-			$this->minFragLen = $fraglen;		
+			$this->minFragLen = $fraglen;
 		}
 	}
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	//count the number of characters output when we output $string
 	private function handleFragLength($fraglen, $minoffset, $string)
 	{
 		$fraglen = $fraglen + $minoffset;
-		
+
 		//for each set of bracketed values remove len '[a4:a5]' minus two
 		//e.g. [a4:a5] equals seven in length. remove five and we are left
 		//with two. this divided by two equals one byte...
@@ -785,42 +785,42 @@ class SignatureGenerator
 		$p_len = 5; //plain length
 
 		$complete_string_len = strlen($string);
-		
-		//This is very much a shortcut but one that does the trick remove 
+
+		//This is very much a shortcut but one that does the trick remove
 		//occurrances of ':' to allow us to count the number of [AB:AC]
 		//wildcards in a string to then calculate the minfraglength from...
 		$strlen_card_removed = strlen(str_replace(':', '', $string));
-		
+
 		$no_bracketed_wildcards = $complete_string_len - $strlen_card_removed;
-		
+
 		$negation_no = 0;
-		
+
 		if ($no_bracketed_wildcards > 0)
 		{
 			$strlen_negation_removed = strlen(str_replace('!', '', $string));
-			
+
 			//number of wildcards with negation in...
 			$negation_no = $complete_string_len - $strlen_negation_removed;
-			
+
 			//number of wildcards left without negation...
 			$plain_count = $no_bracketed_wildcards - $negation_no;
-			
+
 			for ($i = 0; $i < $negation_no; $i++)
 			{
 				$complete_string_len = $complete_string_len - $n_len;
 			}
-			
+
 			for ($i = 0; $i < $plain_count; $i++)
 			{
 				$complete_string_len = $complete_string_len - $p_len;
 			}
 		}
-		
+
 		$bytes = $complete_string_len / 2;
-		
+
 		//add value to fraglength count...
 		$fraglen = $fraglen + $bytes;
-		
+
 		return $fraglen;
 	}
 
@@ -829,13 +829,13 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	//small function to ease the pain out outputting a new fragment value...
@@ -845,7 +845,7 @@ class SignatureGenerator
 		$xml->xmlAddAttribute('MaxOffset', $max, $doc, $frag);
 		$xml->xmlAddAttribute('MinOffset', $min, $doc, $frag);
 		$xml->xmlAddAttribute('Position', $fragPos, $doc, $frag);
-		$xml->xmlAddTextValue($string, $doc, $frag);	
+		$xml->xmlAddTextValue($string, $doc, $frag);
 	}
 
 
@@ -853,13 +853,13 @@ class SignatureGenerator
 
 	/*********************************************************************
 	*
-	* Function		:  
+	* Function		:
 	*
-	* Description	: 
+	* Description	:
 	*
-	* parameters	: 	
-	*          
-	* Returns		:  
+	* parameters	:
+	*
+	* Returns		:
 	*
 	*********************************************************************/
 	//split bracketed values into an array or single variable depending
@@ -868,16 +868,16 @@ class SignatureGenerator
 	{
 		$len = strlen($fragments);
 		$options =  '';
-		
+
 		//might not need array as we figure out how to output nodes
 		//might do on the fly. array structures things nicely at the moment
 		$optarr = array();
-		
+
 		//exit condition after open-bracket end before close-bracket
 		for ($j = 1; $j < $len-1; $j++)
 		{
 			$optchar = $fragments[$j];
-			
+
 			if ($optchar == $delimeter)
 			{
 				$optarr[] = $options;
@@ -888,9 +888,9 @@ class SignatureGenerator
 				$options = $options . $optchar;
 			}
 		}
-		
+
 		$optarr[] = $options;
-		
+
 		return $optarr;
 	}
 }
