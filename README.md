@@ -57,7 +57,7 @@ hope to be working on.
 [droid-1]: http://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/
 [tna-1]: http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
 [expo-1]: http://exponentialdecay.co.uk/sd/index.htm
-[issues-1]: https://github.com/exponential-decay/signature-development-utility/issues
+[issues-1]: https://github.com/ffdev-info/signature-development-utility/issues
 [coptr-1]: http://coptr.digipres.org/PRONOM_Signature_Development_Utility
 [ffdev-1]: http://ffdev.info
-[gh-1]: https://github.com/exponential-decay/signature-development-utility/releases/tag/1.0
+[gh-1]: https://github.com/ffdev-info/signature-development-utility/releases/tag/1.0

@@ -66,7 +66,7 @@ func main() {
 
 // setHeaders will set the HTTP response headers for downloading of a file.
 func setHeaders(w http.ResponseWriter, contentLength int, signatureFileName string) {
-	const userAgent = "signature-development-utility/2.0 (https://github.com/exponential-decay/signature-development-utility; by @beet_keeper"
+	const userAgent = "signature-development-utility/2.0 (https://github.com/ffdev-info/signature-development-utility; by @beet_keeper"
 
 	const headerUserAgent = "User-agent"
 	const headerDisposition = "Content-Disposition"
