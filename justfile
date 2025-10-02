@@ -15,3 +15,11 @@ setup:
 # Remove pre-commit
 teardown:
  pre-commit uninstall
+
+# Run go server
+goserver:
+ ./signature-development-utility -port 8001
+
+# Run PHP server
+phpserver:
+ php -S localhost:8000
