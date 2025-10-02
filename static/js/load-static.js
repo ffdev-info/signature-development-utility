@@ -2,7 +2,7 @@
 
 tryContainerSelector = "#try-container"
 guideContainerSelector = "#guide-container"
-aboutContainerSelector = "#about-contaainer"
+aboutContainerSelector = "#about-container"
 
 // cloneAndAddSequence ...
 function cloneAndAddTry() {
