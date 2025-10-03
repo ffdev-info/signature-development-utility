@@ -22,23 +22,38 @@
             <div class="twelve columns">
                <h3>Try it with Siegfried!</h3>
                <p>
-                  To allow you to test your new file format signatures Siegfried and its
-                  signature editing utility Roy has been compiled into this web-page. Load
-                  new signatures and test them against your own data before submitting
-                  them to The National Archives, UK.
+                  To allow you to test your new file format signatures,
+                  <a href="https://github.com/richardlehane/siegfried" target="_blank">
+                    Siegfried
+                  </a>
+                  and its signature editing utility Roy have been
+                  compiled into this web page. Load new signatures and test
+                  them against your own data before submitting them to The
+                  National Archives, UK.
                </p>
                <p>
-                  <a hred="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank">WebAssembly (WASM)</a>
+                 Siegfried implements PRONOM signatures just as DROID does.
+                 Testing your signatures here is a good indicator they will
+                 work as anticipated when you are ready to share them with
+                 the PRONOM team.
+               </p>
+               <p>
+                  <a hred="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank">
+                    WebAssembly (WASM)
+                  </a>
                   is a technology that enables you to run low-level
                   code in the safety of your own browser, protecting your computer and
-                  your data.
+                  your data. Richard Lehane talks more about the WASM implementation
+                  of Siegfried on
+                  <a href="https://www.linkedin.com/pulse/siegfried-front-end-richard-lehane-dlvaf/" target="_blank">
+                    his blog on LinkedIn
+                  </a>.
                </p>
                <p>
                   Roy's WebAssembly will generate a signature file as it would given an
                   equivalent instruction on the command line:
                <pre>./roy build --noreports -extend /path/to/your/signature/file.xml</pre>
                </p>
-               <p>
                <div class="info">
                   <p><strong>Tip!</strong>
                      open a new tab in your browser and keep the "<b>Try it out!</b>" tab in this utility
@@ -47,7 +62,6 @@
                      <br>
                   </p>
                </div>
-               </p>
             </div>
          </div>
          <div class="row">
@@ -108,6 +122,7 @@
                <textarea id="results" class="results" name="results" rows="200" cols="70" readonly></textarea>
             </div>
          </div>
+        <br/><br/>
       </div>
    </div>
 </body>
