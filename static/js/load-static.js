@@ -5,17 +5,6 @@ guideContainerSelector = "#guide-container"
 aboutContainerSelector = "#about-container"
 
 // cloneAndAddSequence ...
-function cloneAndAddTry() {
-	fetch("./try.htm")
-	  .then(response => {
-	    return response.text()
-	  })
-	  .then(data => {
-	    $(data).insertAfter(tryContainerSelector)
-	  });
-}
-
-// cloneAndAddSequence ...
 function cloneAndAddGuide() {
 	fetch("./guide.htm")
 	  .then(response => {

@@ -1,21 +1,4 @@
-<head>
-   <!-- sf wasm -->
-   <link rel="stylesheet" href="css/sf.css">
    <script src="wasm/example.js"></script>
-   <script src="wasm/wasm_exec.js"></script>
-   <script>
-      const go = new window.Go();
-      WebAssembly.instantiateStreaming(
-          fetch("wasm/sf.wasm"),
-          go.importObject
-      ).then(
-          (obj) => {
-              go.run(obj.instance);
-          }
-      );
-   </script>
-</head>
-<body>
    <div id="Try" class="tab" style="display:none">
       <div>
          <div class="row">
@@ -125,4 +108,4 @@
         <br/><br/>
       </div>
    </div>
-</body>
+

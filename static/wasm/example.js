@@ -17,6 +17,7 @@ function getArgs() {
 
 window.onload = () => {
     document.getElementById('butOpen').addEventListener('click', () => {
+        console.log("select file for identification: opening dialog");
         window.showOpenFilePicker().then(handles => {
             for (const idx in handles) {
                 const args = getArgs();
@@ -31,6 +32,7 @@ window.onload = () => {
         );
     });
     document.getElementById('butDirectory').addEventListener('click', () => {
+        console.log("select directory for identification: opening dialog");
         window.showDirectoryPicker().then(handle => {
             const args = getArgs();
             args.unshift(handle);
@@ -43,6 +45,8 @@ window.onload = () => {
         );
     });
     document.getElementById('butRoy').addEventListener('click', () => {
+        alert("ok;")
+        console.log("select signature file to load: opening dialog");
         window.showOpenFilePicker().then(handles => {
             for (const idx in handles) {
                 const args = getArgs();
