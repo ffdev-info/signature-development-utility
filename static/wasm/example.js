@@ -45,7 +45,6 @@ window.onload = () => {
         );
     });
     document.getElementById('butRoy').addEventListener('click', () => {
-        alert("ok;")
         console.log("select signature file to load: opening dialog");
         window.showOpenFilePicker().then(handles => {
             for (const idx in handles) {
