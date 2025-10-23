@@ -28,6 +28,22 @@
   <script src="js/load-static.js"></script>
   <script src="js/clone.js"></script>
 
+   <!-- sf wasm -->
+   <link rel="stylesheet" href="css/sf.css">
+   <script src="wasm/example.js"></script>
+   <script src="wasm/wasm_exec.js"></script>
+   <script>
+      const go = new window.Go();
+      WebAssembly.instantiateStreaming(
+          fetch("wasm/sf.wasm"),
+          go.importObject
+      ).then(
+          (obj) => {
+              go.run(obj.instance);
+          }
+      );
+   </script>
+
 </head>
 <body>
 
@@ -283,9 +299,118 @@
         </div>
 
         <!-- Try it! Tab -->
-        <div id="try-container">
+
           <!-- Container for Siegfried/Roy. -->
-        </div>
+            <div id="Try" class="tab" style="display:none">
+                <div>
+                    <div class="row">
+                        <div class="twelve columns">
+                        <h3>Try it with Siegfried!</h3>
+                        <p>
+                            To allow you to test your new file format signatures,
+                            <a href="https://github.com/richardlehane/siegfried" target="_blank">
+                                Siegfried
+                            </a>
+                            and its signature editing utility Roy have been
+                            compiled into this web page. Load new signatures and test
+                            them against your own data before submitting them to The
+                            National Archives, UK.
+                        </p>
+                        <p>
+                            Siegfried implements PRONOM signatures just as DROID does.
+                            Testing your signatures here is a good indicator they will
+                            work as anticipated when you are ready to share them with
+                            the PRONOM team.
+                        </p>
+                        <p>
+                            <a hred="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank">
+                                WebAssembly (WASM)
+                            </a>
+                            is a technology that enables you to run low-level
+                            code in the safety of your own browser, protecting your computer and
+                            your data. Richard Lehane talks more about the WASM implementation
+                            of Siegfried on
+                            <a href="https://www.linkedin.com/pulse/siegfried-front-end-richard-lehane-dlvaf/" target="_blank">
+                                his blog on LinkedIn
+                            </a>.
+                        </p>
+                        <p>
+                            Roy's WebAssembly will generate a signature file as it would given an
+                            equivalent instruction on the command line:
+                        <pre>./roy build --noreports -extend /path/to/your/signature/file.xml</pre>
+                        </p>
+                        <div class="info">
+                            <p><strong>Tip!</strong>
+                                open a new tab in your browser and keep the "<b>Try it out!</b>" tab in this utility
+                                open so that you don't have to reload your test signatures unless you
+                                want to.
+                                <br>
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve columns" style="margin-top: 1%;">
+                        <h4 class="subtitle">Config</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="four columns" style="margin-top: 1%;">
+                        <label for="format">Format</label>
+                        <select name="format" id="format">
+                            <option value="yaml">yaml</option>
+                            <!--
+                                <option value="json">json</option>
+                                <option value="csv">csv</option>
+                                <option value="droid">droid</option>
+                                -->
+                        </select>
+                        </div>
+                        <div class="four columns" style="margin-top: 1%;">
+                        <label for="hash">Hash</label>
+                        <select name="hash" id="hash">
+                            <option value="none">none</option>
+                            <option value="md5">md5</option>
+                            <option value="sha1">sha1</option>
+                            <option value="sha256">sha256</option>
+                            <option value="sha512">sha512</option>
+                            <option value="crc">crc</option>
+                        </select>
+                        </div>
+                        <div class="four columns" style="margin-top: 1%;">
+                        <label for="z">Scan within archives</label>
+                        <input id="archives" type="radio" name="z" value="true"> <span class="label-body">true</span>
+                        &nbsp;&nbsp;
+                        <input id="archives" type="radio" name="z" value="false" checked> <span class="label-body">false</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve columns" style="margin-top: 1%;">
+                        <h4 class="subtitle">Run Siegfried and Roy</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="four columns">
+                        <input class="button u-full-width" id="butOpen" type="button" value="Siegfried: File ID">
+                        </div>
+                        <div class="four columns">
+                        <input class="button u-full-width" id="butDirectory" type="button" value="Siegfried: Directory ID">
+                        </div>
+                        <div class="four columns">
+                        <input class="button u-full-width" id="butRoy" type="button" value="Roy: Load signature">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve columns" style="margin-top: 1%;">
+                        <hr>
+                        <h3>Results</h3>
+                        <textarea id="results" class="results" name="results" rows="200" cols="70" readonly></textarea>
+                        </div>
+                    </div>
+                    <br/><br/>
+                </div>
+            </div>
+
 
         <!-- Guide Tab -->
         <div id="guide-container">
