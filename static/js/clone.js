@@ -15,7 +15,6 @@ $(document).ready(function() {
     cloneAndAddPath();
 
     // Add static components to pages.
-    cloneAndAddTry()
     cloneAndAddGuide()
     cloneAndAddAbout()
 
