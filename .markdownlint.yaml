@@ -1,0 +1,8 @@
+---
+default: true
+
+# Two headings in the file.
+MD025: False
+
+# Line-length.
+MD013: False

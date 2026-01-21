@@ -157,7 +157,7 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 // GetFileName is a small helper function that helps us make some
 // useful metadata about our output.
 func (container *ContainerSignatureInterface) GetFileName() string {
-	const devSig = "development-container-signature"
-	nicePUID := strings.Replace(container.PUID, "/", "-", 1)
-	return fmt.Sprintf("%s-%s", devSig, nicePUID)
+	niceName := formatFilenameString(container.Description)
+	nicePUID := formatFilenameString(container.PUID)
+	return fmt.Sprintf("%s-%s-%s", niceName, nicePUID, generateDateNoSpaces())
 }

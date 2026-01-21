@@ -13,7 +13,32 @@ signature workflow. It has also been written so that new features can be
 developed easier as I tend not to write in PHP anymore. There is more
 information at [ffdev.info][ffdev-1].
 
-## Legacy version...
+### Installation
+
+The current version bootstrapped to the PHP back-end of Signature development
+utility 1.0 for standard signatures. You can run this code by building the go
+component:
+
+* `go build`
+
+And then running it:
+
+* `./signature-development-utility -port [optional]`
+
+Without a port defined you'll be able to access the utility on port `8080`.
+
+To run the PHP server, you first need to install `php-dom` with
+`sudo apt-get install php-dom`.
+
+And then to run up the server: `php -S localhost:8000`
+
+#### Custom ports
+
+You can also run this using custom ports e.g.
+
+* `./signature-development-utility -port 80 -bootstrap 8000`
+
+## Legacy version
 
 The first iteration of this application is hosted by
 [The National Archives][tna-1] and mirrored on [my own site][expo-1]. It is
@@ -32,7 +57,7 @@ hope to be working on.
 [droid-1]: http://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/
 [tna-1]: http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
 [expo-1]: http://exponentialdecay.co.uk/sd/index.htm
-[issues-1]: https://github.com/exponential-decay/signature-development-utility/issues
+[issues-1]: https://github.com/ffdev-info/signature-development-utility/issues
 [coptr-1]: http://coptr.digipres.org/PRONOM_Signature_Development_Utility
 [ffdev-1]: http://ffdev.info
-[gh-1]: https://github.com/exponential-decay/signature-development-utility/releases/tag/1.0
+[gh-1]: https://github.com/ffdev-info/signature-development-utility/releases/tag/1.0

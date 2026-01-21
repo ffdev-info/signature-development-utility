@@ -2,7 +2,7 @@
 
 ul.tab-nav {
     list-style: none;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #3d4245;
     padding-left: 5px;
 }
 
@@ -18,7 +18,7 @@ ul.tab-nav li a.button {
 }
 
 ul.tab-nav li a.active.button {
-    border-bottom: 0.175em solid #fff;
+    border-bottom: 0.175em solid #2b2f31;
 }
 
 .tab-content .tab-pane {
@@ -30,5 +30,5 @@ ul.tab-nav li a.active.button {
 }
 
 .tab-color {
-    background-color: #dddddd;
+    background-color: #222;
 }

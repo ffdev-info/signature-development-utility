@@ -5,9 +5,13 @@ package sigdevutil
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // SignatureInterface provides a modern mapping for the DROID signature
@@ -20,6 +24,7 @@ type SignatureInterface struct {
 	MimeType      string      // File format MIMEtype.
 	Extension     string      // File format extension.
 	Sequences     []sequences // File format signature sequences.
+	FileVersion   string      // Signature file version number.
 }
 
 // sequences ...
@@ -48,6 +53,7 @@ func (signature *SignatureInterface) ProcessSignature(form url.Values) {
 	signature.VersionNumber = strings.TrimSpace(form[version][0])
 	signature.MimeType = strings.TrimSpace(form[mimetype][0])
 	signature.Extension = strings.TrimSpace(form[ext][0])
+	signature.FileVersion = fmt.Sprintf("%d", time.Now().Unix())
 	// Signature information.
 	const signatureField = "signature-input-0"
 	const offsetField = "offset-0"
@@ -170,7 +176,78 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 // GetFileName is a small helper function that helps us make some
 // useful metadata about our output.
 func (signature *SignatureInterface) GetFileName() string {
-	const devSig = "development-signature"
-	nicePUID := strings.Replace(signature.PUID, "/", "-", 1)
-	return fmt.Sprintf("%s-%s", devSig, nicePUID)
+	const sigFile = "signature-file"
+	niceName := formatFilenameString(signature.FormatName)
+	niceVersion := formatFilenameString(signature.VersionNumber)
+	return fmt.Sprintf("%s-%s-%s", niceName, niceVersion, sigFile)
+}
+
+// Bootstrap signature development utility 2.0 to Signature development
+// utility 1.0.
+func (signature *SignatureInterface) ToPHP(port string) string {
+
+	counter := strconv.Itoa(len(signature.Sequences))
+
+	const ORIGINALURL = "http://localhost:%s/php/process_signature_form.php"
+
+	const count = "counter"
+	const name = "name1"
+	const version = "version1"
+	const ext = "extension1"
+	const mime = "mimetype1"
+	const puid = "puid1"
+	const fileVer = "fileVer1"
+
+	data := url.Values{
+		count:   {counter},
+		name:    {signature.FormatName},
+		version: {signature.VersionNumber},
+		ext:     {signature.Extension},
+		mime:    {signature.MimeType},
+		puid:    {signature.PUID},
+		fileVer: {signature.FileVersion},
+	}
+
+	const sig = "signature"
+	const anchor = "anchor"
+	const offset = "offset"
+	const maxoffset = "maxoffset"
+
+	const variableAnchor = "Variable"
+
+	for idx := 1; idx <= len(signature.Sequences); idx++ {
+		sigField := fmt.Sprintf("%s%d", sig, idx)
+		anchorField := fmt.Sprintf("%s%d", anchor, idx)
+		offsetField := fmt.Sprintf("%s%d", offset, idx)
+		maxOffsetField := fmt.Sprintf("%s%d", maxoffset, idx)
+
+		sequence := signature.Sequences[idx-1]
+
+		data[sigField] = []string{sequence.Sequence}
+
+		// Variable sequence handling for 1.0.
+		data[anchorField] = []string{sequence.Relativity}
+		// Variable offsets are no longer set by the time it reaches
+		// this point in the code, so identify it by negating BOF and EOF.
+		if sequence.Relativity != BOF && sequence.Relativity != EOF {
+			data[anchorField] = []string{variableAnchor}
+		}
+
+		data[offsetField] = []string{strconv.Itoa(sequence.Offset)}
+		data[maxOffsetField] = []string{strconv.Itoa(sequence.MaxOffset)}
+	}
+
+	originalURL := fmt.Sprintf(ORIGINALURL, port)
+	fmt.Fprintf(os.Stderr, "Bootstrap URL: %s", originalURL)
+
+	resp, err := http.PostForm(originalURL, data)
+	if err != nil {
+		return fmt.Sprintf("Error sending request: %s", err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Sprintf("Error sending request: %s", err)
+	}
+	return string(body)
 }
