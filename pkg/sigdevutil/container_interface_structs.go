@@ -101,27 +101,35 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 		var binarySignatures = new(binarySigs)
 
 		if len(file.Sequences) > 0 {
+
 			byteSequences := len(file.Sequences)
 			subSequences := make([]subSeq, byteSequences)
+
+			// TODO.. DRY across contaienr and standard...
 			for idx, sig := range file.Sequences {
-				var signatureSequence sequence
+				var signatureSequence byteSequence
 				signatureSequence.Sequence = sig.Sequence
-				signatureSequence.Position = defaultPosition
-				signatureSequence.SubSeqMin = strconv.Itoa(sig.Offset)
-				if sig.Relativity != VAR {
-					signatureSequence.SubSeqMax = strconv.Itoa(sig.MaxOffset)
-					subSequences[idx].Reference = sig.Relativity
+				signatureSequence.Reference = defaultPosition
+				if sig.Relativity != VAR || sig.Relativity == "" {
+					subSequences[idx] = signatureSequence
+					continue
+
 				}
-				subSequences[idx].SubSeq = signatureSequence
+				signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
+				signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
+				signatureSequence.Reference = sig.Relativity
+				subSequences[idx] = signatureSequence
 			}
+
 			var byteSequence = make([]byteSeq, 1)
 			byteSequence[0].ByteSequence = subSequences
-			byteSequence[0].ID = internalSignatureID
+			//byteSequence[0].ID = internalSignatureID
 
 			var internalSignature = new(intSig)
 			internalSignature.InternalSignature = byteSequence
 
 			binarySignatures.InternalSignatureCollection = internalSignature
+
 		}
 		internalObjects[idx].Path = file.Path
 		// Conditionally output the binary signatures because if they

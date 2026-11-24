@@ -105,24 +105,23 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 
 	subSequences := make([]subSeq, byteSequences)
 
+	// TODDO: DRY in containers...
 	for idx, sig := range signature.Sequences {
-		var signatureSequence sequence
+		var signatureSequence byteSequence
 		signatureSequence.Sequence = sig.Sequence
-		signatureSequence.MinFragLen = defaultMinFragLen
-		signatureSequence.Position = defaultPosition
-		signatureSequence.SubSeqMin = strconv.Itoa(sig.Offset)
+		signatureSequence.Reference = defaultPosition
 		if sig.Relativity != VAR && sig.Relativity != "" {
-			signatureSequence.SubSeqMax = strconv.Itoa(sig.MaxOffset)
-			subSequences[idx].Reference = sig.Relativity
+			subSequences[idx] = signatureSequence
+			continue
 		}
-		subSequences[idx].SubSeq = signatureSequence
+		signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
+		signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
+		signatureSequence.Reference = sig.Relativity
+		subSequences[idx] = signatureSequence
 	}
 
 	var byteSequence = make([]byteSeq, 1)
 	byteSequence[0].ByteSequence = subSequences
-
-	byteSequence[0].ID = internalSignatureID
-	byteSequence[0].Specificity = specificity
 
 	var internalSignature intSig
 
