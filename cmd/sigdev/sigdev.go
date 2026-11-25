@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"net/url"
@@ -17,6 +18,7 @@ import (
 
 var (
 	port  string
+	dev   bool
 	https bool
 	cert  string
 	key   string
@@ -25,9 +27,24 @@ var (
 // Initialize the variables used for the flags
 func init() {
 	flag.StringVar(&port, "port", "8080", "port to run the utility on")
+	flag.BoolVar(&dev, "dev", false, "use development tools, e.g. non-embedded files")
 	flag.BoolVar(&https, "https", false, "run a HTTPS server")
 	flag.StringVar(&cert, "cert", "localhost.crt", "certificate file")
 	flag.StringVar(&key, "key", "localhost.key", "private key file")
+}
+
+// getHandlers returns a http handler depending on whether we have
+// dev mode set.
+func getHandlers() http.Handler {
+	const staticDir = "static"
+	var httpHandler http.Handler
+	if !dev {
+		httpHandler = http.FileServer(http.Dir(staticDir))
+	} else {
+		static, _ := fs.Sub(staticEmbed, staticDir)
+		httpHandler = http.FileServer(http.FS(static))
+	}
+	return httpHandler
 }
 
 // main is the primary entry point of this code-base.
@@ -35,21 +52,21 @@ func main() {
 	// Parse application flags.
 	flag.Parse()
 
-	// Application consts.
-	const staticDir = "./static"
 	const routeStandard = "/processStandardSignature"
 	const routeContainer = "/processContainerSignature"
 	const rootDir = "/"
 
 	// Dynamic application variables.
-	var iAmListening = fmt.Sprintf("Good evening caller... listening on :%s..", port)
 	var routePort = fmt.Sprintf(":%s", port)
 
-	fs := http.FileServer(http.Dir(staticDir))
-	http.Handle(rootDir, fs)
+	// Handlers.
+	http.Handle(rootDir, getHandlers())
 	http.HandleFunc(routeStandard, processStandardSignature)
 	http.HandleFunc(routeContainer, processContainerSignature)
-	log.Println(iAmListening)
+
+	// good night seattle we love you...
+	log.Printf("good evening caller... listening on :%s..", port)
+	log.Printf("connect with http://0.0.0.0:%s", port)
 
 	if !https {
 		err := http.ListenAndServe(routePort, nil)
