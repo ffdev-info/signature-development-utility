@@ -1,7 +1,7 @@
 // Structures needed for creating standard (non-container) signature
 // files compatible with DROID.
 
-package sigdevutil
+package sigdev
 
 import (
 	"encoding/xml"

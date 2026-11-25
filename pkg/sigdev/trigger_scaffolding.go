@@ -1,7 +1,7 @@
 // Create standard signature patterns needed to trigger container
 // matching.
 
-package sigdevutil
+package sigdev
 
 // Create the entries needed for the ZIP trigger in the standard
 // signature file.

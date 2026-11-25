@@ -1,7 +1,7 @@
 // Structures that enable us to receive information from a web-form and
 // process that into a standard signature file.
 
-package sigdevutil
+package sigdev
 
 import (
 	"fmt"
@@ -101,25 +101,7 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 	const defaultMinFragLen = "0"
 	const defaultPosition = "1"
 
-	byteSequences := len(signature.Sequences)
-
-	subSequences := make([]subSeq, byteSequences)
-
-	// TODDO: DRY in containers...
-	for idx, sig := range signature.Sequences {
-		var signatureSequence byteSequence
-		signatureSequence.Sequence = sig.Sequence
-
-		if sig.Relativity == VAR || sig.Relativity == VAROFF || sig.Relativity == "" {
-			subSequences[idx] = signatureSequence
-			continue
-		}
-
-		signatureSequence.Reference = sig.Relativity
-		signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
-		signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
-		subSequences[idx] = signatureSequence
-	}
+	subSequences, _ := processByteSequences(signature)
 
 	var byteSequence = make([]byteSeq, 1)
 	byteSequence[0].ByteSequence = subSequences

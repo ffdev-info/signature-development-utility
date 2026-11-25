@@ -1,7 +1,7 @@
 // Tests for the different interfaces created for creating DROID
 // compatible signature files.
 
-package sigdevutil
+package sigdev
 
 import (
 	"testing"

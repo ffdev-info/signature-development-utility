@@ -1,15 +1,13 @@
 // Structures that enable us to receive information from a web-form and
 // process that into a container signature file.
 
-package sigdevutil
+package sigdev
 
 import (
 	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
-
-	"log"
 )
 
 // ContainerSignatureInterface contains a modernized the top-level
@@ -100,30 +98,14 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 
 	for idx, file := range container.Files {
 
+		// TODO: how does new work?
 		var binarySignatures = new(binarySigs)
 
 		if len(file.Sequences) > 0 {
 
-			byteSequences := len(file.Sequences)
-			subSequences := make([]subSeq, byteSequences)
-
-			// TODO.. DRY across contaienr and standard...
-			for idx, sig := range file.Sequences {
-				var signatureSequence byteSequence
-				signatureSequence.Sequence = sig.Sequence
-				if sig.Relativity == VAR || sig.Relativity == VAROFF || sig.Relativity == "" {
-					subSequences[idx] = signatureSequence
-					continue
-
-				}
-				signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
-				signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
-
-				log.Println(sig.Relativity)
-
-				signatureSequence.Reference = sig.Relativity
-				subSequences[idx] = signatureSequence
-			}
+			ff := SignatureInterface{}
+			ff.Sequences = file.Sequences
+			subSequences, _ := processByteSequences(&ff)
 
 			var byteSequence = make([]byteSeq, 1)
 			byteSequence[0].ByteSequence = subSequences

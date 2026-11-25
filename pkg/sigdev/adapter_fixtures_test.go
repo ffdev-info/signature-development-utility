@@ -1,7 +1,7 @@
 // Fixtures for testing the signature output capabilities of this
 // package.
 
-package sigdevutil
+package sigdev
 
 // A basic fixture representing a standard signature file that works
 // with DROID. See also: Hammer and nail. It might be more elegant to
