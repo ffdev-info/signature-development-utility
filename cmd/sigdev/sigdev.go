@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ffdev/signature-development-utility/pkg/sigdevutil"
+	"github.com/ffdev/signature-development-utility/pkg/sigdev"
 )
 
 var (
