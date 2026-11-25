@@ -12,7 +12,9 @@ import (
 const (
 	BOF string = "BOFoffset" // BOF represents a beginning of file offset in DROID.
 	EOF        = "EOFoffset" // EOF represents a beginning of file offset in DROID.
-	VAR        = "VARoffset" // VAR is a helper variable that we use to negate a variable offset's output in the code below.
+	// Variable offsets are not written verbatim in DROID.
+	VAR    = "Variable"
+	VAROFF = "VARoffset"
 )
 
 // FFSignatureFile encapsulates an entire DROID signature file and all
@@ -94,10 +96,12 @@ type intSig struct {
 </FFSignatureFile>
 ```
 */
- 
+
 // byteSequences...
 type byteSequences struct {
 	ByteSequence []byteSequence `xml:"ByteSequence"`
+	ID           string         `xml:"ID,attr"`
+	Specificity  string         `xml:"Specificity,attr,omitempty"`
 }
 
 // byteSequence...

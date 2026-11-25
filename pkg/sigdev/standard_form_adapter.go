@@ -109,19 +109,22 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 	for idx, sig := range signature.Sequences {
 		var signatureSequence byteSequence
 		signatureSequence.Sequence = sig.Sequence
-		signatureSequence.Reference = defaultPosition
-		if sig.Relativity != VAR && sig.Relativity != "" {
+
+		if sig.Relativity == VAR || sig.Relativity == VAROFF || sig.Relativity == "" {
 			subSequences[idx] = signatureSequence
 			continue
 		}
+
+		signatureSequence.Reference = sig.Relativity
 		signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
 		signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
-		signatureSequence.Reference = sig.Relativity
 		subSequences[idx] = signatureSequence
 	}
 
 	var byteSequence = make([]byteSeq, 1)
 	byteSequence[0].ByteSequence = subSequences
+	byteSequence[0].ID = "1"
+	byteSequence[0].Specificity = specificity
 
 	var internalSignature intSig
 

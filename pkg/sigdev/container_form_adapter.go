@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+
+	"log"
 )
 
 // ContainerSignatureInterface contains a modernized the top-level
@@ -109,21 +111,23 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 			for idx, sig := range file.Sequences {
 				var signatureSequence byteSequence
 				signatureSequence.Sequence = sig.Sequence
-				signatureSequence.Reference = defaultPosition
-				if sig.Relativity != VAR || sig.Relativity == "" {
+				if sig.Relativity == VAR || sig.Relativity == VAROFF || sig.Relativity == "" {
 					subSequences[idx] = signatureSequence
 					continue
 
 				}
 				signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
 				signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)
+
+				log.Println(sig.Relativity)
+
 				signatureSequence.Reference = sig.Relativity
 				subSequences[idx] = signatureSequence
 			}
 
 			var byteSequence = make([]byteSeq, 1)
 			byteSequence[0].ByteSequence = subSequences
-			//byteSequence[0].ID = internalSignatureID
+			byteSequence[0].ID = internalSignatureID
 
 			var internalSignature = new(intSig)
 			internalSignature.InternalSignature = byteSequence

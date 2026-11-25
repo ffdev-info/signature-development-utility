@@ -11,21 +11,9 @@ const standardSignatureOne = `<?xml version="1.0" encoding="UTF-8"?>
 <FFSignatureFile xmlns="http://www.nationalarchives.gov.uk/pronom/SignatureFile" Version="1" DateCreated="1970-01-01T00:00:00">
  <InternalSignatureCollection>
   <InternalSignature ID="1" Specificity="Specific">
-   <ByteSequence Reference="BOFoffset">
-    <SubSequence Position="1" MinFragLength="0" SubSeqMinOffset="0" SubSeqMaxOffset="0">
-     <Sequence>1234</Sequence>
-    </SubSequence>
-   </ByteSequence>
-   <ByteSequence Reference="EOFoffset">
-    <SubSequence Position="1" MinFragLength="0" SubSeqMinOffset="0" SubSeqMaxOffset="0">
-     <Sequence>3456</Sequence>
-    </SubSequence>
-   </ByteSequence>
-   <ByteSequence>
-    <SubSequence Position="1" MinFragLength="0" SubSeqMinOffset="0">
-     <Sequence>7890</Sequence>
-    </SubSequence>
-   </ByteSequence>
+   <ByteSequence Reference="BOFoffset" Sequence="1234" MinOffset="0" MaxOffset="0"></ByteSequence>
+   <ByteSequence Reference="EOFoffset" Sequence="3456" MinOffset="0" MaxOffset="0"></ByteSequence>
+   <ByteSequence Sequence="7890"></ByteSequence>
   </InternalSignature>
  </InternalSignatureCollection>
  <FileFormatCollection>
@@ -53,11 +41,7 @@ const containerSignatureOne = `<?xml version="1.0" encoding="UTF-8"?>
      <BinarySignatures>
       <InternalSignatureCollection>
        <InternalSignature ID="1">
-        <ByteSequence Reference="BOFoffset">
-         <SubSequence Position="1" SubSeqMinOffset="40" SubSeqMaxOffset="1024">
-          <Sequence>10000000576F72642E446F63756D656E742E</Sequence>
-         </SubSequence>
-        </ByteSequence>
+        <ByteSequence Reference="BOFoffset" Sequence="10000000576F72642E446F63756D656E742E" MinOffset="40" MaxOffset="1024"></ByteSequence>
        </InternalSignature>
       </InternalSignatureCollection>
      </BinarySignatures>
