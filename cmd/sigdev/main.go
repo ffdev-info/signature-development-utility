@@ -10,30 +10,45 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
-	"github.com/ffdev-info/signature-development-utility/pkg/sigdevutil"
+	"github.com/ffdev-info/signature-development-utility/internal/logformatter"
+	"github.com/ffdev-info/signature-development-utility/pkg/sigdev"
 )
 
 var (
-	port         string
-	bootsrapPort string
-	dev          bool
-	https        bool
-	cert         string
-	key          string
+	port  string
+	dev   bool
+	https bool
+	cert  string
+	key   string
+	debug bool
+	ver   bool
+
+	// goreleaser vars.
+	appname string = "ffdev-info/sigdev"
+	version string = "0.0.0-dev"
+	builtBy string = "unused"
+	commit  string = "0000000000000000000000000000000000000000"
+	date    string = "1970-01-01"
 )
 
 // Initialize the variables used for the flags
 func init() {
 	flag.StringVar(&port, "port", "8080", "port to run the utility on")
-	flag.StringVar(&bootsrapPort, "bootstrap", "8000", "port to run the utility on")
 	flag.BoolVar(&dev, "dev", false, "use development tools, e.g. non-embedded files")
 	flag.BoolVar(&https, "https", false, "run a HTTPS server")
 	flag.StringVar(&cert, "cert", "localhost.crt", "certificate file")
 	flag.StringVar(&key, "key", "localhost.key", "private key file")
+	flag.BoolVar(&debug, "debug", false, "enable debug logging")
+	// Version
+	flag.BoolVar(&ver, "version", false, "display app version")
+	flag.BoolVar(&ver, "v", false, "display app version")
 }
+
+const createdBy = "signature development utility: https://ffdev.info, version:"
 
 // getHandlers returns a http handler depending on whether we have
 // dev mode set.
@@ -51,8 +66,17 @@ func getHandlers() http.Handler {
 
 // main is the primary entry point of this code-base.
 func main() {
-	// Parse application flags.
+
+	// Initialize all the things.
 	flag.Parse()
+	logformatter.Set("sigdev", true)
+	if debug {
+		log.Println("debug logging is turned on")
+	}
+	if ver {
+		showVersion()
+		os.Exit(0)
+	}
 
 	const routeStandard = "/processStandardSignature"
 	const routeContainer = "/processContainerSignature"
@@ -67,8 +91,10 @@ func main() {
 	http.HandleFunc(routeContainer, processContainerSignature)
 
 	// good night seattle we love you...
-	log.Printf("good evening caller... listening on :%s..", port)
+	log.Printf("good evening caller... listening on :%s...", port)
 	log.Printf("connect with http://0.0.0.0:%s", port)
+
+	log.Println(appname, version, builtBy, commit, date)
 
 	if !https {
 		err := http.ListenAndServe(routePort, nil)
@@ -77,7 +103,7 @@ func main() {
 		}
 	}
 	// Run as HTTPS.
-	fmt.Println("Running with HTTPS...")
+	fmt.Println("running with HTTPS...")
 	log.Fatal(http.ListenAndServeTLS(routePort, cert, key, nil))
 }
 
@@ -118,13 +144,16 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 	case "GET":
 	case "POST":
 		if err := request.ParseForm(); err != nil {
-			log.Printf("ParseForm() err: %#v", err)
+			log.Printf("%#v", err)
 			return
 		}
-		log.Printf("Signature submission, thank you!")
-		/* log.Printf(
-			"Request from client (request.PostFrom): %#v\n", request.PostForm,
-		) */
+		log.Printf("signature submission, thank you!")
+		if debug {
+			log.Printf(
+				"request from client (request.PostFrom): %#v\n", request.PostForm,
+			)
+		}
+
 		if container {
 			// Process the form values and return a container signature
 			// file.
@@ -137,21 +166,22 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 		}
 		// Process the form values and return a standard signature file.
 		signatureFile, fileName := processStandardForm(request.PostForm)
+		signatureFile = fmt.Sprintf("<!-- %s %s -->\n%s", createdBy, version, signatureFile)
 		setHeaders(writer, len(signatureFile), fileName)
 		// Stream the content to the client.
 		reader := strings.NewReader(signatureFile)
 		io.Copy(writer, reader)
 		return
 	default:
-		const onlyPost = "Sorry, only POST methods are supported."
-		fmt.Fprintf(writer, onlyPost)
+		const onlyPost = "sorry, only POST methods are supported."
+		fmt.Fprint(writer, onlyPost)
 	}
 }
 
 // processForm will initiate the processing of a standard signature
 // file and return the signature file as a string.
 func processStandardForm(form url.Values) (string, string) {
-	var signatureFile sigdevutil.SignatureInterface
+	var signatureFile sigdev.SignatureInterface
 	signatureFile.ProcessSignature(form)
 	const triggers = "triggers"
 	if _, ok := form[triggers]; ok {
@@ -159,14 +189,14 @@ func processStandardForm(form url.Values) (string, string) {
 		droid := signatureFile.ToDROID(true)
 		return droid.String(), signatureFile.GetFileName()
 	}
-	droid := signatureFile.ToPHP(bootsrapPort)
-	return droid, signatureFile.GetFileName()
+	droid := signatureFile.ToDROID(false)
+	return droid.String(), signatureFile.GetFileName()
 }
 
 // processContainerForm will initiate the processing of a container
 // signature file and return the signature file as a string.
 func processContainerForm(form url.Values) (string, string) {
-	var signatureFile sigdevutil.ContainerSignatureInterface
+	var signatureFile sigdev.ContainerSignatureInterface
 	signatureFile.ProcessSignature(form)
 	droid := signatureFile.ToDROIDContainer()
 	return droid.String(), signatureFile.GetFileName()

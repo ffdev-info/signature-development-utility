@@ -1,7 +1,7 @@
 // Structures needed for creating standard (non-container) signature
 // files compatible with DROID.
 
-package sigdevutil
+package sigdev
 
 import (
 	"encoding/xml"
@@ -11,8 +11,16 @@ import (
 // Relativity constants.
 const (
 	BOF string = "BOFoffset" // BOF represents a beginning of file offset in DROID.
-	EOF        = "EOFoffset" // EOF represents a beginning of file offset in DROID.
-	VAR        = "VARoffset" // VAR is a helper variable that we use to negate a variable offset's output in the code below.
+	EOF string = "EOFoffset" // EOF represents a beginning of file offset in DROID.
+	// Variable offsets are not written verbatim in DROID.
+	//
+	// NB. we have more control over these, but testing showed a few
+	// divergences. Pick one, and remain consistent throughout the
+	// code. Ensure tests exist that verify this. DROID only needs
+	// a blank field.
+	VAR      string = "Variable"
+	VAROFF   string = "VARoffset"
+	VARBASIC string = "VAR"
 )
 
 // FFSignatureFile encapsulates an entire DROID signature file and all
@@ -32,11 +40,12 @@ type ffColl struct {
 
 // ffformat ...
 type ffformat struct {
-	ID       string `xml:"ID,attr"`
-	Name     string `xml:"Name,attr"`
-	PUID     string `xml:"PUID,attr"`
-	Version  string `xml:"Version,attr"`
-	MIMEType string `xml:"MIMEType,attr"`
+	ID         string `xml:"ID,attr"`
+	Name       string `xml:"Name,attr"`
+	PUID       string `xml:"PUID,attr"`
+	Version    string `xml:"Version,attr"`
+	MIMEType   string `xml:"MIMEType,attr"`
+	FormatType string `xml:"FormatType,attr"`
 
 	InternalSignatureID         string `xml:"InternalSignatureID,omitempty"`
 	Extension                   string `xml:"Extension,omitempty"`
@@ -45,29 +54,23 @@ type ffformat struct {
 
 // intSig ...
 type intSig struct {
-	InternalSignature []byteSeq `xml:"InternalSignature"`
+	InternalSignature []byteSequences `xml:"InternalSignature"`
 }
 
-// byteSeq ...
-type byteSeq struct {
-	ByteSequence []subSeq `xml:"ByteSequence"`
-	ID           string   `xml:"ID,attr"`
-	Specificity  string   `xml:"Specificity,attr,omitempty"`
+// byteSequences...
+type byteSequences struct {
+	ByteSequence []byteSequence `xml:"ByteSequence"`
+	ID           string         `xml:"ID,attr"`
+	Specificity  string         `xml:"Specificity,attr,omitempty"`
 }
 
-// subSeq ...
-type subSeq struct {
-	SubSeq    sequence `xml:"SubSequence"`
-	Reference string   `xml:"Reference,attr,omitempty"`
-}
-
-// sequence ...
-type sequence struct {
-	Sequence   string `xml:"Sequence"`
-	Position   string `xml:"Position,attr"`
-	MinFragLen string `xml:"MinFragLength,attr,omitempty"`
-	SubSeqMin  string `xml:"SubSeqMinOffset,attr"`
-	SubSeqMax  string `xml:"SubSeqMaxOffset,attr,omitempty"`
+// byteSequence...
+type byteSequence struct {
+	Reference string `xml:"Reference,attr,omitempty"`
+	// DROID simple signature.
+	Sequence  string `xml:"Sequence,attr,omitempty"`
+	MinOffset string `xml:"MinOffset,attr,omitempty"`
+	MaxOffset string `xml:"MaxOffset,attr,omitempty"`
 }
 
 // String returns the signature file as a string.
@@ -76,14 +79,14 @@ func (signatureFile FFSignatureFile) String() string {
 	return fmt.Sprintf("%s%s", xml.Header, out)
 }
 
-// output returns the XML representation of the struct and includes the
+// String returns the XML representation of the struct and includes the
 // XML's declaration.
 func (intSigColl intSig) String() string {
 	out, _ := xml.MarshalIndent(intSigColl, "", " ")
 	return fmt.Sprintf("%s%s", xml.Header, out)
 }
 
-// output returns the XML representation of the struct and includes the
+// String returns the XML representation of the struct and includes the
 // XML's declaration.
 func (formatColl ffColl) String() string {
 	out, _ := xml.MarshalIndent(formatColl, "", " ")
