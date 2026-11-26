@@ -1,7 +1,7 @@
 // Constants associated with any of this work and shared across the
 // code-base.
 
-package sigdevutil
+package sigdev
 
 // Constants to help in the creation of either signature file.
 

@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ffdev-info/signature-development-utility/pkg/sigdevutil"
+	"github.com/ffdev-info/signature-development-utility/pkg/sigdev"
 )
 
 var (
@@ -151,7 +151,7 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 // processForm will initiate the processing of a standard signature
 // file and return the signature file as a string.
 func processStandardForm(form url.Values) (string, string) {
-	var signatureFile sigdevutil.SignatureInterface
+	var signatureFile sigdev.SignatureInterface
 	signatureFile.ProcessSignature(form)
 	const triggers = "triggers"
 	if _, ok := form[triggers]; ok {
@@ -166,7 +166,7 @@ func processStandardForm(form url.Values) (string, string) {
 // processContainerForm will initiate the processing of a container
 // signature file and return the signature file as a string.
 func processContainerForm(form url.Values) (string, string) {
-	var signatureFile sigdevutil.ContainerSignatureInterface
+	var signatureFile sigdev.ContainerSignatureInterface
 	signatureFile.ProcessSignature(form)
 	droid := signatureFile.ToDROIDContainer()
 	return droid.String(), signatureFile.GetFileName()
