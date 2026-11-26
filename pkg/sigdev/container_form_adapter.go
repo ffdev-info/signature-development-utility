@@ -1,7 +1,7 @@
 // Structures that enable us to receive information from a web-form and
 // process that into a container signature file.
 
-package sigdevutil
+package sigdev
 
 import (
 	"fmt"
@@ -98,22 +98,15 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 
 	for idx, file := range container.Files {
 
+		// TODO: how does new work?
 		var binarySignatures = new(binarySigs)
 
 		if len(file.Sequences) > 0 {
-			byteSequences := len(file.Sequences)
-			subSequences := make([]subSeq, byteSequences)
-			for idx, sig := range file.Sequences {
-				var signatureSequence sequence
-				signatureSequence.Sequence = sig.Sequence
-				signatureSequence.Position = defaultPosition
-				signatureSequence.SubSeqMin = strconv.Itoa(sig.Offset)
-				if sig.Relativity != VAR {
-					signatureSequence.SubSeqMax = strconv.Itoa(sig.MaxOffset)
-					subSequences[idx].Reference = sig.Relativity
-				}
-				subSequences[idx].SubSeq = signatureSequence
-			}
+
+			ff := SignatureInterface{}
+			ff.Sequences = file.Sequences
+			subSequences, _ := processByteSequences(&ff)
+
 			var byteSequence = make([]byteSeq, 1)
 			byteSequence[0].ByteSequence = subSequences
 			byteSequence[0].ID = internalSignatureID
@@ -122,6 +115,7 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 			internalSignature.InternalSignature = byteSequence
 
 			binarySignatures.InternalSignatureCollection = internalSignature
+
 		}
 		internalObjects[idx].Path = file.Path
 		// Conditionally output the binary signatures because if they

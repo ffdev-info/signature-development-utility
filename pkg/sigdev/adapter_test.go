@@ -1,7 +1,7 @@
 // Tests for the different interfaces created for creating DROID
 // compatible signature files.
 
-package sigdevutil
+package sigdev
 
 import (
 	"testing"
@@ -41,8 +41,8 @@ func TestStandardSignatureGeneration(t *testing.T) {
 	// Compare the output with our fixture.
 	if standardSignatureFile.String() != standardSignatureOne {
 		t.Errorf(
-			"Test XML doesn't match expected XML, outputting test XML: %s",
-			standardSignatureFile.String(),
+			"result doesn't match expected XML, received: \n%s, \n\nexpected: \n%s",
+			standardSignatureFile.String(), standardSignatureOne,
 		)
 	}
 }
@@ -88,8 +88,8 @@ func TestContainerSignatureGeneration(t *testing.T) {
 	// Compare the output with our fixture.
 	if containerSignatureFile.String() != containerSignatureOne {
 		t.Errorf(
-			"Test XML doesn't match expected XML, outputting test XML: %s",
-			containerSignatureFile.String(),
+			"result doesn't match expected XML, received: \n%s, \n\nexpected: \n%s",
+			containerSignatureFile.String(), containerSignatureOne,
 		)
 	}
 }

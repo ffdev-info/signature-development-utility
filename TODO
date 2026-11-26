@@ -1,0 +1,9 @@
+TODO
+====
+
+* Embed html and js etc. DONE
+* Rename "interfaces" to adapter... (probably adapter) DONE
+* Look for redundancy, some already spotted, remove
+* Publish a new roy PR maybe finally finish that PR
+* Cherry-pick fixes from bootstrap branch
+* Bring over golang tooling from other projects, e.g. relase.yaml from latest code.

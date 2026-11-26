@@ -1,7 +1,7 @@
 // Create standard signature patterns needed to trigger container
 // matching.
 
-package sigdevutil
+package sigdev
 
 // Create the entries needed for the ZIP trigger in the standard
 // signature file.
@@ -124,9 +124,9 @@ func getZIPTriggerUnused() (byteSeq, ffformat) {
 	zipSig.Sequences = zipSequences
 
 	zip := zipSig.ToDROID(false)
-	zip.InternalSignatureCollection.InternalSignature[0].ID = "2"
-	zip.FileFormatCollection.FileFormat[0].InternalSignatureID = "2"
-	zip.FileFormatCollection.FileFormat[0].ID = "2"
+	//zip.InternalSignatureCollection.InternalSignature[0].ID = "2"
+	//zip.FileFormatCollection.FileFormat[0].InternalSignatureID = "2"
+	//zip.FileFormatCollection.FileFormat[0].ID = "2"
 
 	return zip.InternalSignatureCollection.InternalSignature[0], zip.FileFormatCollection.FileFormat[0]
 }
@@ -160,7 +160,7 @@ func getOOXMLTriggerUnused() (byteSeq, ffformat) {
 	ooxmlSig.Sequences = ooxmlSequences
 
 	ooxml := ooxmlSig.ToDROID(false)
-	ooxml.InternalSignatureCollection.InternalSignature[0].ID = "3"
+	//ooxml.InternalSignatureCollection.InternalSignature[0].ID = "3"
 	ooxml.FileFormatCollection.FileFormat[0].InternalSignatureID = "3"
 	ooxml.FileFormatCollection.FileFormat[0].ID = "3"
 
@@ -195,7 +195,7 @@ func getOLE2TriggerUnused() (byteSeq, ffformat) {
 	ole2Sig.Sequences = ole2Sequences
 
 	ole2 := ole2Sig.ToDROID(false)
-	ole2.InternalSignatureCollection.InternalSignature[0].ID = "4"
+	//ole2.InternalSignatureCollection.InternalSignature[0].ID = "4"
 	ole2.FileFormatCollection.FileFormat[0].InternalSignatureID = "4"
 	ole2.FileFormatCollection.FileFormat[0].ID = "4"
 

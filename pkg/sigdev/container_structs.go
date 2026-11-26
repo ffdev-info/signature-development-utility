@@ -1,7 +1,7 @@
 // Structures associated with the output of a container signature file
 // compatible with DROID.
 
-package sigdevutil
+package sigdev
 
 import (
 	"encoding/xml"

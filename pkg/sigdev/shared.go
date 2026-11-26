@@ -1,7 +1,7 @@
 // Potentially shared functions that can be used for different types of
 // signature generation.
 
-package sigdevutil
+package sigdev
 
 import (
 	"strings"
