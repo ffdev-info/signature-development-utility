@@ -1,3 +1,3 @@
 module github.com/ffdev-info/signature-development-utility
 
-go 1.23.5
+go 1.26.2
