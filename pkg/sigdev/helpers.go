@@ -9,10 +9,12 @@ func processByteSequences(a *SignatureInterface) ([]byteSequence, error) {
 	for idx, sig := range a.Sequences {
 		var signatureSequence byteSequence
 		signatureSequence.Sequence = sig.Sequence
-		if sig.Relativity == VAR || sig.Relativity == VAROFF || sig.Relativity == "" {
+		if sig.Relativity == VAR ||
+			sig.Relativity == VAROFF ||
+			sig.Relativity == VARBASIC ||
+			sig.Relativity == "" {
 			subSequences[idx] = signatureSequence
 			continue
-
 		}
 		signatureSequence.MinOffset = strconv.Itoa(sig.Offset)
 		signatureSequence.MaxOffset = strconv.Itoa(sig.MaxOffset)

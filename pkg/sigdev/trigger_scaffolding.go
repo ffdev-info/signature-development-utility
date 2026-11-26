@@ -5,7 +5,7 @@ package sigdev
 
 // Create the entries needed for the ZIP trigger in the standard
 // signature file.
-func getZIPTrigger() (byteSeq, ffformat) {
+func getZIPTrigger() (byteSequences, ffformat) {
 	var zipSig SignatureInterface
 	zipSig.PUID = "x-fmt/263"
 	zipSig.FormatName = "ZIP Format"
@@ -32,7 +32,7 @@ func getZIPTrigger() (byteSeq, ffformat) {
 
 // Create the entries needed for the OOXML trigger in the standard
 // signature file.
-func getOOXMLTrigger() (byteSeq, ffformat) {
+func getOOXMLTrigger() (byteSequences, ffformat) {
 	var ooxmlSig SignatureInterface
 	ooxmlSig.PUID = "fmt/189"
 	ooxmlSig.FormatName = "Microsoft Office Open XML"
@@ -59,7 +59,7 @@ func getOOXMLTrigger() (byteSeq, ffformat) {
 
 // Create the entries needed for the OLE2 trigger in the standard
 // signature file.
-func getOLE2Trigger() (byteSeq, ffformat) {
+func getOLE2Trigger() (byteSequences, ffformat) {
 	// Create OLE2 signature sequence.
 	/*
 		FMT/111
@@ -93,7 +93,7 @@ func getOLE2Trigger() (byteSeq, ffformat) {
 
 // Create the entries needed for the ZIP trigger in the standard
 // signature file.
-func getZIPTriggerUnused() (byteSeq, ffformat) {
+func getZIPTriggerUnused() (byteSequences, ffformat) {
 	// Create ZIP file signature sequence.
 	/*
 		X-FMT/263
@@ -133,7 +133,7 @@ func getZIPTriggerUnused() (byteSeq, ffformat) {
 
 // Create the entries needed for the OOXML trigger in the standard
 // signature file.
-func getOOXMLTriggerUnused() (byteSeq, ffformat) {
+func getOOXMLTriggerUnused() (byteSequences, ffformat) {
 	// Create OOXML sequence.
 	/*
 		FMT/189
@@ -169,7 +169,7 @@ func getOOXMLTriggerUnused() (byteSeq, ffformat) {
 
 // Create the entries needed for the OLE2 trigger in the standard
 // signature file.
-func getOLE2TriggerUnused() (byteSeq, ffformat) {
+func getOLE2TriggerUnused() (byteSequences, ffformat) {
 	// Create OLE2 signature sequence.
 	/*
 		FMT/111

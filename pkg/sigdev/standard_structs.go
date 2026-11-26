@@ -11,10 +11,16 @@ import (
 // Relativity constants.
 const (
 	BOF string = "BOFoffset" // BOF represents a beginning of file offset in DROID.
-	EOF        = "EOFoffset" // EOF represents a beginning of file offset in DROID.
+	EOF string = "EOFoffset" // EOF represents a beginning of file offset in DROID.
 	// Variable offsets are not written verbatim in DROID.
-	VAR    = "Variable"
-	VAROFF = "VARoffset"
+	//
+	// NB. we have more control over these, but testing showed a few
+	// divergences. Pick one, and remain consistent throughout the
+	// code. Ensure tests exist that verify this. DROID only needs
+	// a blank field.
+	VAR      string = "Variable"
+	VAROFF   string = "VARoffset"
+	VARBASIC string = "VAR"
 )
 
 // FFSignatureFile encapsulates an entire DROID signature file and all
@@ -47,55 +53,8 @@ type ffformat struct {
 
 // intSig ...
 type intSig struct {
-	InternalSignature []byteSeq `xml:"InternalSignature"`
+	InternalSignature []byteSequences `xml:"InternalSignature"`
 }
-
-/*
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Signature file namespace and metadata is important but none so more as
-     the version here which helps DROID to list signature files in its
-     graphical user interface.
--->
-<FFSignatureFile xmlns="http://www.nationalarchives.gov.uk/pronom/SignatureFile" Version="1788527087" DateCreated="2026-09-03T12:22:45">
-  <!-- Section 1: InternalSignatureCollection contains 1..* internal signatures
-       associated with a file format.
-  -->
-  <InternalSignatureCollection>
-    <InternalSignature ID="1">
-      <ByteSequence Reference="BOFoffset" Sequence="" MinOffset="" MaxOffset=""/>
-      <ByteSequence Reference="BOFoffset" Sequence="" MinOffset="" MaxOffset=""/>
-    </InternalSignature>
-    <InternalSignature ID="2">
-      <ByteSequence Reference="BOFoffset" Sequence="" MinOffset="" MaxOffset=""/>
-      <ByteSequence Reference="BOFoffset" Sequence="" MinOffset="" MaxOffset=""/>
-    </InternalSignature>
-    <InternalSignature ID="3">
-      <ByteSequence Reference="BOFoffset" Sequence="" MinOffset="" MaxOffset=""/>
-    </InternalSignature>
-  </InternalSignatureCollection>
-  <!-- Section 2: FileFormatCollection contains 1..* file format metadata
-       sections and mappings to internal signatures with priorities, and
-       file format extensions.
-  -->
-  <FileFormatCollection>
-    <FileFormat ID="1" Name="FILE FORMAT NAME" PUID="CUSTOM/PUID" Version="V0" MIMEType="application/octet-stream">
-      <InternalSignatureID>1</InternalSignatureID>
-      <InternalSignatureID>2</InternalSignatureID>
-      <Extension>ext</Extension>
-    </FileFormat>
-    <FileFormat ID="3" Name="FILE FORMAT NAME" PUID="CUSTOM/PUID" Version="V1" MIMEType="application/octet-stream">
-      <InternalSignatureID>3</InternalSignatureID>
-      <Extension>ext</Extension>
-      <!-- A priority means that this record is selected by DROID if a file
-           is also moatched to one it has a priority over.
-      -->
-      <HasPriorityOverFileFormatID>1</HasPriorityOverFileFormatID>
-    </FileFormat>
-  </FileFormatCollection>
-</FFSignatureFile>
-```
-*/
 
 // byteSequences...
 type byteSequences struct {
@@ -106,17 +65,12 @@ type byteSequences struct {
 
 // byteSequence...
 type byteSequence struct {
-	//SubSeq    sequence `xml:"SubSequence"`
 	Reference string `xml:"Reference,attr,omitempty"`
-	// Simple sig...
+	// DROID simple signature.
 	Sequence  string `xml:"Sequence,attr,omitempty"`
 	MinOffset string `xml:"MinOffset,attr,omitempty"`
 	MaxOffset string `xml:"MaxOffset,attr,omitempty"`
 }
-
-// Compatibility.
-type subSeq = byteSequence
-type byteSeq = byteSequences
 
 // String returns the signature file as a string.
 func (signatureFile FFSignatureFile) String() string {
@@ -124,14 +78,14 @@ func (signatureFile FFSignatureFile) String() string {
 	return fmt.Sprintf("%s%s", xml.Header, out)
 }
 
-// output returns the XML representation of the struct and includes the
+// String returns the XML representation of the struct and includes the
 // XML's declaration.
 func (intSigColl intSig) String() string {
 	out, _ := xml.MarshalIndent(intSigColl, "", " ")
 	return fmt.Sprintf("%s%s", xml.Header, out)
 }
 
-// output returns the XML representation of the struct and includes the
+// String returns the XML representation of the struct and includes the
 // XML's declaration.
 func (formatColl ffColl) String() string {
 	out, _ := xml.MarshalIndent(formatColl, "", " ")

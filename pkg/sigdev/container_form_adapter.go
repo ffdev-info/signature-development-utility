@@ -84,38 +84,26 @@ func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignat
 	const defaultPosition = "1"
 
 	var containerSignatureID string = "1"
-
 	var fileFormatMapping FileFormatMapping
 	fileFormatMapping.SignatureID = containerSignatureID
 	fileFormatMapping.PUID = container.PUID
-
 	var allFormatMappings FileFormatMappings
 	allFormatMappings.FFMap = fileFormatMapping
-
 	allFiles := len(container.Files)
-
 	internalObjects := make([]fileContainer, allFiles)
 
 	for idx, file := range container.Files {
-
-		// TODO: how does new work?
 		var binarySignatures = new(binarySigs)
-
 		if len(file.Sequences) > 0 {
-
 			ff := SignatureInterface{}
 			ff.Sequences = file.Sequences
 			subSequences, _ := processByteSequences(&ff)
-
-			var byteSequence = make([]byteSeq, 1)
+			var byteSequence = make([]byteSequences, 1)
 			byteSequence[0].ByteSequence = subSequences
 			byteSequence[0].ID = internalSignatureID
-
 			var internalSignature = new(intSig)
 			internalSignature.InternalSignature = byteSequence
-
 			binarySignatures.InternalSignatureCollection = internalSignature
-
 		}
 		internalObjects[idx].Path = file.Path
 		// Conditionally output the binary signatures because if they

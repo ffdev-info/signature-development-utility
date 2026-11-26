@@ -13,27 +13,33 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ffdev-info/signature-development-utility/internal/logformatter"
 	"github.com/ffdev-info/signature-development-utility/pkg/sigdev"
 )
 
 var (
-	port         string
-	bootsrapPort string
-	dev          bool
-	https        bool
-	cert         string
-	key          string
+	port  string
+	dev   bool
+	https bool
+	cert  string
+	key   string
+	debug bool
+
+	// Application variables.
+	version string
 )
 
 // Initialize the variables used for the flags
 func init() {
 	flag.StringVar(&port, "port", "8080", "port to run the utility on")
-	flag.StringVar(&bootsrapPort, "bootstrap", "8000", "port to run the utility on")
 	flag.BoolVar(&dev, "dev", false, "use development tools, e.g. non-embedded files")
 	flag.BoolVar(&https, "https", false, "run a HTTPS server")
 	flag.StringVar(&cert, "cert", "localhost.crt", "certificate file")
 	flag.StringVar(&key, "key", "localhost.key", "private key file")
+	flag.BoolVar(&debug, "debug", false, "enable debug logging")
 }
+
+const createdBy = "created in the signature development utility, https://ffdev.info:"
 
 // getHandlers returns a http handler depending on whether we have
 // dev mode set.
@@ -51,8 +57,13 @@ func getHandlers() http.Handler {
 
 // main is the primary entry point of this code-base.
 func main() {
-	// Parse application flags.
+
+	// Initialize all the things.
 	flag.Parse()
+	logformatter.Set("sigdev", true)
+	if debug {
+		log.Println("debug logging is turned on")
+	}
 
 	const routeStandard = "/processStandardSignature"
 	const routeContainer = "/processContainerSignature"
@@ -67,7 +78,7 @@ func main() {
 	http.HandleFunc(routeContainer, processContainerSignature)
 
 	// good night seattle we love you...
-	log.Printf("good evening caller... listening on :%s..", port)
+	log.Printf("good evening caller... listening on :%s...", port)
 	log.Printf("connect with http://0.0.0.0:%s", port)
 
 	if !https {
@@ -118,13 +129,16 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 	case "GET":
 	case "POST":
 		if err := request.ParseForm(); err != nil {
-			log.Printf("ParseForm() err: %#v", err)
+			log.Printf("%#v", err)
 			return
 		}
-		log.Printf("Signature submission, thank you!")
-		/* log.Printf(
-			"Request from client (request.PostFrom): %#v\n", request.PostForm,
-		) */
+		log.Printf("signature submission, thank you!")
+		if debug {
+			log.Printf(
+				"request from client (request.PostFrom): %#v\n", request.PostForm,
+			)
+		}
+
 		if container {
 			// Process the form values and return a container signature
 			// file.
@@ -137,14 +151,15 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 		}
 		// Process the form values and return a standard signature file.
 		signatureFile, fileName := processStandardForm(request.PostForm)
+		signatureFile = fmt.Sprintf("<!-- %s %s -->\n%s", createdBy, version, signatureFile)
 		setHeaders(writer, len(signatureFile), fileName)
 		// Stream the content to the client.
 		reader := strings.NewReader(signatureFile)
 		io.Copy(writer, reader)
 		return
 	default:
-		const onlyPost = "Sorry, only POST methods are supported."
-		fmt.Fprintf(writer, onlyPost)
+		const onlyPost = "sorry, only POST methods are supported."
+		fmt.Fprint(writer, onlyPost)
 	}
 }
 
@@ -159,8 +174,8 @@ func processStandardForm(form url.Values) (string, string) {
 		droid := signatureFile.ToDROID(true)
 		return droid.String(), signatureFile.GetFileName()
 	}
-	droid := signatureFile.ToPHP(bootsrapPort)
-	return droid, signatureFile.GetFileName()
+	droid := signatureFile.ToDROID(false)
+	return droid.String(), signatureFile.GetFileName()
 }
 
 // processContainerForm will initiate the processing of a container

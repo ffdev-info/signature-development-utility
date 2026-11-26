@@ -5,10 +5,7 @@ package sigdev
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -91,7 +88,7 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 	// Largely because the DROID signature file is designed as XML and
 	// is fairly counter-intuitive to how we might otherwise like to
 	// work nowadays.
-	var zipInt, ooxmlInt, ole2Int byteSeq
+	var zipInt, ooxmlInt, ole2Int byteSequences
 	var zipFF, ooxmlFF, ole2FF ffformat
 	if triggers {
 		zipInt, zipFF = getZIPTrigger()
@@ -109,9 +106,9 @@ func (signature *SignatureInterface) ToDROID(triggers bool) FFSignatureFile {
 
 	subSequences, _ := processByteSequences(signature)
 
-	var byteSequence = make([]byteSeq, 1)
+	var byteSequence = make([]byteSequences, 1)
 	byteSequence[0].ByteSequence = subSequences
-	byteSequence[0].ID = "1"
+	byteSequence[0].ID = internalSignatureID
 	byteSequence[0].Specificity = specificity
 
 	var internalSignature intSig
@@ -164,74 +161,4 @@ func (signature *SignatureInterface) GetFileName() string {
 	niceName := formatFilenameString(signature.FormatName)
 	niceVersion := formatFilenameString(signature.VersionNumber)
 	return fmt.Sprintf("%s-%s-%s", niceName, niceVersion, sigFile)
-}
-
-// Bootstrap signature development utility 2.0 to Signature development
-// utility 1.0.
-func (signature *SignatureInterface) ToPHP(port string) string {
-
-	counter := strconv.Itoa(len(signature.Sequences))
-
-	const ORIGINALURL = "http://localhost:%s/php/process_signature_form.php"
-
-	const count = "counter"
-	const name = "name1"
-	const version = "version1"
-	const ext = "extension1"
-	const mime = "mimetype1"
-	const puid = "puid1"
-	const fileVer = "fileVer1"
-
-	data := url.Values{
-		count:   {counter},
-		name:    {signature.FormatName},
-		version: {signature.VersionNumber},
-		ext:     {signature.Extension},
-		mime:    {signature.MimeType},
-		puid:    {signature.PUID},
-		fileVer: {signature.FileVersion},
-	}
-
-	const sig = "signature"
-	const anchor = "anchor"
-	const offset = "offset"
-	const maxoffset = "maxoffset"
-
-	const variableAnchor = "Variable"
-
-	for idx := 1; idx <= len(signature.Sequences); idx++ {
-		sigField := fmt.Sprintf("%s%d", sig, idx)
-		anchorField := fmt.Sprintf("%s%d", anchor, idx)
-		offsetField := fmt.Sprintf("%s%d", offset, idx)
-		maxOffsetField := fmt.Sprintf("%s%d", maxoffset, idx)
-
-		sequence := signature.Sequences[idx-1]
-
-		data[sigField] = []string{sequence.Sequence}
-
-		// Variable sequence handling for 1.0.
-		data[anchorField] = []string{sequence.Relativity}
-		// Variable offsets are no longer set by the time it reaches
-		// this point in the code, so identify it by negating BOF and EOF.
-		if sequence.Relativity != BOF && sequence.Relativity != EOF {
-			data[anchorField] = []string{variableAnchor}
-		}
-
-		data[offsetField] = []string{strconv.Itoa(sequence.Offset)}
-		data[maxOffsetField] = []string{strconv.Itoa(sequence.MaxOffset)}
-	}
-
-	originalURL := fmt.Sprintf(ORIGINALURL, port)
-	fmt.Fprintf(os.Stderr, "Bootstrap URL: %s", originalURL)
-
-	resp, err := http.PostForm(originalURL, data)
-	if err != nil {
-		return fmt.Sprintf("Error sending request: %s", err)
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Sprintf("Error sending request: %s", err)
-	}
-	return string(body)
 }
