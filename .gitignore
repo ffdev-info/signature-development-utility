@@ -3,5 +3,4 @@
 *.crt
 *.key
 *.csr
-sigdev
 signature-development-utility
