@@ -5,59 +5,77 @@ first written in late 2011.
 
 * **COPTR Entry:** [Signature development utility][coptr-1]
 
-## Current version: 2.0
+## Introduction
 
-The new development is written in Golang and hosted on
-[ffdev.info][ffdev-1]. It has been written to better support the container
-signature workflow. It has also been written so that new features can be
-developed easier as I tend not to write in PHP anymore. There is more
-information at [ffdev.info][ffdev-1].
+This code represents the pairing of standard signature development and
+container signature development.
+
+The new code is written in Golang. I wrote this replacement for the original
+utility in 2020, but some of my assumptions about the structure of the new
+signature files were incorrect, so for a while, I bootstrapped the code
+onto my old PHP release to provide you with standard and container
+signature capabilities.
+
+I have since researched and corrected my assumptions, so I can now offer
+you an entirely self-contained executable that allows you to write
+PRONOM-compatible file format signatures in the comfort of your own server.
+
+Now self-contained, the new version should be much easier to develop and
+add features to. See below under [contributing](#contributing).
+
+### Hosting
+
+The utility is also hosted on [ffdev.info][ffdev-1].
 
 ### Installation
 
-The current version bootstrapped to the PHP back-end of Signature development
-utility 1.0 for standard signatures. You can run this code by building the go
-component:
+Download a suitable [release][release-1] and simply run the executable from
+your command line. A port will be opened and you will be able to navigate
+to it via localhost in your own browser. Follow the web-page prompts to
+begin writing your signatures.
 
-* `go build`
+[release-1]: https://github.com/ffdev-info/signature-development-utility/releases
 
-And then running it:
+## Signature development
 
-* `./signature-development-utility -port [optional]`
-
-Without a port defined you'll be able to access the utility on port `8080`.
-
-To run the PHP server, you first need to install `php-dom` with
-`sudo apt-get install php-dom`.
-
-And then to run up the server: `php -S localhost:8000`
-
-#### Custom ports
-
-You can also run this using custom ports e.g.
-
-* `./signature-development-utility -port 80 -bootstrap 8000`
+For more background on file format signature development,
+David C., Francesca, Tyler, and I have created a resource:
+[Searching for a signature: A file format identification workshop][search-1].
 
 ## Legacy version
 
-The first iteration of this application is hosted by
-[The National Archives][tna-1] and mirrored on [my own site][expo-1]. It is
-written in PHP and, well, it's a bit harder to maintain, but still it provides
-a pretty pure implementation of what signature files used to be like in DROID 4
-and 5 and largely 6, although the patterns are not de-constructed and compiled
-differently in DROID 6 at runtime. 1.0 can be found in the releases section of
-[this repository][gh-1].
+My first iteration of this application was hosted by
+[The National Archives][tna-1] and remains mirrored, for the time
+being, on [my homepage][expo-1]. It was written in PHP and is no
+longer maintained.
+
+In the time it existed it enabled a greater
+level of collaboration between external signature developers and
+The National Archives, UK. Almost
+immediately, Bill Underwood at Georgia Tech Research Institute began a
+project submitting file format signatures developed using the utility,
+a task that would have been much harder without democratizing tooling
+such as this. All these years later, the previous utility also enabled
+development of signature capabilities in new  PRONOM, i.e. PRONOM 2026.
+
+The legacy implementation  provided a pure implementation of DROID 4.0
+copmatible signatures, the only reference for developers outside of
+the original PRONOM stored procedures used to achieve the same result.
+
+A release of this utility is available in [this repository][gh-1].
 
 ## Contributing
 
-Check out the [issues][issues-1] log for ideas for contributing and things I
-hope to be working on.
+Check out the [issues][issues-1] log for existing issues.
 
-[pronom-1]: http://www.nationalarchives.gov.uk/PRONOM/Default.aspx
-[droid-1]: http://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/
-[tna-1]: http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
+<!-- reference links -->
+
+[pronom-1]: https://pronom.nationalarchives.gov.uk/
+[droid-1]: https://www.nationalarchives.gov.uk/information-management/manage-information/preserving-digital-records/droid/
+[tna-1]: https://web.archive.org/web/20210530124335/http://www.nationalarchives.gov.uk/pronom/sigdev/index.htm
 [expo-1]: http://exponentialdecay.co.uk/sd/index.htm
 [issues-1]: https://github.com/ffdev-info/signature-development-utility/issues
 [coptr-1]: http://coptr.digipres.org/PRONOM_Signature_Development_Utility
 [ffdev-1]: http://ffdev.info
 [gh-1]: https://github.com/ffdev-info/signature-development-utility/releases/tag/1.0
+[search-1]: https://ffdev-info.github.io/searching-for-a-signature/

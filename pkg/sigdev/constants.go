@@ -1,12 +1,11 @@
 // Constants associated with any of this work and shared across the
 // code-base.
 
-package sigdevutil
+package sigdev
 
 // Constants to help in the creation of either signature file.
 
 const signatureFileNamespace = "http://www.nationalarchives.gov.uk/pronom/SignatureFile"
-const signatureFileVersion = "1"
 
 const containerSchemaVersion = "1.0"
 const containerSignatureVersion = "1"

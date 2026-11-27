@@ -11,6 +11,10 @@ all-checks:
 # Setup pre-commit
 setup:
  pre-commit install --install-hooks # uninstall: `pre-commit uninstall`
+ # Setup golang checks.
+ go install golang.org/x/tools/cmd/godoc@latest
+ go install golang.org/x/tools/cmd/goimports@latest
+ go install honnef.co/go/tools/cmd/staticcheck@latest
 
 # Remove pre-commit
 teardown:
@@ -20,6 +24,33 @@ teardown:
 goserver:
  ./signature-development-utility -port 8001
 
-# Run PHP server
-phpserver:
- php -S localhost:8000
+# Run go linting
+linting:
+ - goimports -w .
+ - go fmt ./...
+ - go vet ./...
+ - staticcheck ./...
+
+# Fix imports
+fix-imports:
+  goimports -w .
+
+# Run tests
+test:
+  go test ./...
+
+# Run tests without cache
+test-nocache:
+  go test -count=1 ./...
+
+# Docs
+docs:
+  godoc -http 0.0.0.0:8000
+
+# Build a release snapshot
+build-snapshot:
+    goreleaser build --snapshot --single-target --clean -f .goreleaser.yml
+
+# Build a tagged release
+build-release:
+    goreleaser release --skip=publish --clean -f .goreleaser.yml --skip=sign

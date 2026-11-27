@@ -1,7 +1,7 @@
 // Structures that enable us to receive information from a web-form and
 // process that into a container signature file.
 
-package sigdevutil
+package sigdev
 
 import (
 	"fmt"
@@ -81,46 +81,27 @@ func (container *ContainerSignatureInterface) ProcessSignature(form url.Values) 
 func (container *ContainerSignatureInterface) ToDROIDContainer() ContainerSignatureMapping {
 
 	const internalSignatureID = "1"
-	const defaultPosition = "1"
 
 	var containerSignatureID string = "1"
-
 	var fileFormatMapping FileFormatMapping
 	fileFormatMapping.SignatureID = containerSignatureID
 	fileFormatMapping.PUID = container.PUID
-
 	var allFormatMappings FileFormatMappings
 	allFormatMappings.FFMap = fileFormatMapping
-
 	allFiles := len(container.Files)
-
 	internalObjects := make([]fileContainer, allFiles)
 
 	for idx, file := range container.Files {
-
 		var binarySignatures = new(binarySigs)
-
 		if len(file.Sequences) > 0 {
-			byteSequences := len(file.Sequences)
-			subSequences := make([]subSeq, byteSequences)
-			for idx, sig := range file.Sequences {
-				var signatureSequence sequence
-				signatureSequence.Sequence = sig.Sequence
-				signatureSequence.Position = defaultPosition
-				signatureSequence.SubSeqMin = strconv.Itoa(sig.Offset)
-				if sig.Relativity != VAR {
-					signatureSequence.SubSeqMax = strconv.Itoa(sig.MaxOffset)
-					subSequences[idx].Reference = sig.Relativity
-				}
-				subSequences[idx].SubSeq = signatureSequence
-			}
-			var byteSequence = make([]byteSeq, 1)
+			ff := SignatureInterface{}
+			ff.Sequences = file.Sequences
+			subSequences, _ := processByteSequences(&ff)
+			var byteSequence = make([]byteSequences, 1)
 			byteSequence[0].ByteSequence = subSequences
 			byteSequence[0].ID = internalSignatureID
-
 			var internalSignature = new(intSig)
 			internalSignature.InternalSignature = byteSequence
-
 			binarySignatures.InternalSignatureCollection = internalSignature
 		}
 		internalObjects[idx].Path = file.Path
