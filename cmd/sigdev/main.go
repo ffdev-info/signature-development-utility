@@ -166,7 +166,7 @@ func signatureProcessing(writer http.ResponseWriter, request *http.Request, cont
 		}
 		// Process the form values and return a standard signature file.
 		signatureFile, fileName := processStandardForm(request.PostForm)
-		signatureFile = fmt.Sprintf("<!-- %s %s -->\n%s", createdBy, version, signatureFile)
+		signatureFile = fmt.Sprintf("<!-- %s %s -->\n%s\n", createdBy, version, signatureFile)
 		setHeaders(writer, len(signatureFile), fileName)
 		// Stream the content to the client.
 		reader := strings.NewReader(signatureFile)
